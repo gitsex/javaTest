@@ -61,6 +61,7 @@ public class SchqSpdpbPpldProcessor extends  SchqProcessor{
   			    	 schqHeaderBean.setUrlMap(map);
   			    	 System.out.println(map.get("targetUrl"));
   			    	 Spider.create(schqSpdpbPpldProcessor).addUrl(map.get("targetUrl")).run();
+  			    	 
   			     }
   			 }
   		 }
