@@ -34,7 +34,7 @@ public class SchqSpdpbPpldExploration{
 	//获取商品店铺榜_品牌粒度URL集合
 	public List<HashMap<String,String>> getSpdpbPpldUrlList(String account,String childAccountArr) {
 		 //获取行业目录
-		 List<HashMap<String, String>> hymlList=SchqUrlUtil.getHyml(schqDbcom, schqHeaderBean);
+		 List<HashMap<String, String>> hymlList=SchqUrlUtil.getHyml(schqDbcom, schqHeaderBean).subList(0, 1);
 		 //返回URL集合信息
 		 List<HashMap<String,String>> urlList=new ArrayList<HashMap<String,String>>();
 		 HashMap<String,String> urlMap=null;
@@ -54,9 +54,9 @@ public class SchqSpdpbPpldExploration{
 		    for(Map<String, Object> spdpbHyldMap:spdpbList){
 			    String geturl=StringUtil.objectVerString(spdpbHyldMap.get("geturl"));
 			    String childAccount=StringUtil.objectVerString(spdpbHyldMap.get("child_account"));
+			    //遍历目录等级
 			    for(Map<String,String> mlMap:hymlList){
 			    	    String cateId=mlMap.get("id");
-					    String targetUrl=geturl.replaceAll("##D##", yesterdayday).replaceAll("##CID##", cateId);	
 					    Map<String, String> pplbMap=SchqUrlUtil.getPplb(schqDbcom, schqHeaderBean, cateId, yesterdayday);
 					    //遍历品牌列表
 					    for(Entry<String, String> entry:pplbMap.entrySet()){
@@ -67,7 +67,7 @@ public class SchqSpdpbPpldExploration{
 							   //循环支付金额分段类型（0,分时段趋势图，1，时段累计图）
 							    for(int k=-1;k<=1;k++){
 						    	   urlMap=new HashMap<String,String>();
-								   String finalTargetUrl=targetUrl.replaceAll("##BID##", brandId).replaceAll("##DE##", j+"").replaceAll("##S##", k+"");
+								   String finalTargetUrl=geturl.replaceAll("##D##", yesterdayday).replaceAll("##CID##", cateId).replaceAll("##BID##", brandId).replaceAll("##DE##", j+"").replaceAll("##S##", k+"");
 								   System.out.println("finalTargetUrl："+finalTargetUrl);
 								   urlMap.put("childAccount",childAccount);
 								   urlMap.put("accountid",accountid);

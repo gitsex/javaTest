@@ -54,12 +54,18 @@ public class SchqSpdpbPpldProcessor extends  SchqProcessor{
   				 schqHeaderBean.setCookie(refer_cookie);
 //  			 'spdpb-ppld-rxsp','spdpb-ppld-llsp','spdpb-ppld-rxdp','spdpb-ppld-lldp'
   				 //遍历商品店铺榜_品牌粒度
-  				 List<HashMap<String,String>> urlSpdpbPpLdList=schqSpdpbPpldExploration.getSpdpbPpldUrlList(account,"'spdpb-ppld-llsp'");
+  				 List<HashMap<String,String>> urlSpdpbPpLdList=schqSpdpbPpldExploration.getSpdpbPpldUrlList(account,"'spdpb-ppld-lldp'");
   				 System.out.println("urlSpdpbPpLdList.size()："+urlSpdpbPpLdList.size());
   			     for(int j=0;j<urlSpdpbPpLdList.size();j++){
   			    	 Map<String,String> map=urlSpdpbPpLdList.get(j);
   			    	 schqHeaderBean.setUrlMap(map);
   			    	 System.out.println(map.get("targetUrl"));
+  			    	 try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
   			    	 Spider.create(schqSpdpbPpldProcessor).addUrl(map.get("targetUrl")).run();
   			    	 
   			     }
@@ -97,6 +103,7 @@ public class SchqSpdpbPpldProcessor extends  SchqProcessor{
 		       }
 	    	   dataList.add(dataMap);
 	       }
+	       
 		   switch (childAccount) {
 		       //商品店铺榜_行业粒度_热销商品榜
 		       case "spdpb-ppld-rxsp":
