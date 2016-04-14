@@ -51,13 +51,13 @@ public class SchqSpdpbHyldProcessor extends  SchqProcessor{
   				 String account=StringUtil.objectVerString(taskMap.get("account"));
   				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
   				 schqHeaderBean.setCookie(refer_cookie);
-  				 
-  				 List<HashMap<String,String>> urlHyzbList=schqSpdpbHyldExploration.getSpdpbHyldUrlList(account,"'spdpb-hyld-rxsp','spdpb-hyld-llsp','spdpb-hyld-rxdp','spdpb-hyld-lldp'");
+//  				'spdpb-hyld-rxsp','spdpb-hyld-llsp','spdpb-hyld-rxdp','spdpb-hyld-lldp'
+  				 List<HashMap<String,String>> urlHyzbList=schqSpdpbHyldExploration.getSpdpbHyldUrlList(account,"'spdpb-hyld-lldp'");
   				 System.out.println("urlHyzbList.size()£º"+urlHyzbList.size());
   			     for(int j=0;j<urlHyzbList.size();j++){
   			    	 Map<String,String> map=urlHyzbList.get(j);
   			    	 schqHeaderBean.setUrlMap(map);
-  			    	 System.out.println(map.get("targetUrl"));
+//  			     System.out.println(map.get("targetUrl"));
   			    	 Spider.create(schqSpdpbHyldProcessor).addUrl(map.get("targetUrl")).run();
   			     }
   			 }
