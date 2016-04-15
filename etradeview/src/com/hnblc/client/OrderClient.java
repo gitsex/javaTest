@@ -37,6 +37,14 @@ public class OrderClient {
 
 	public static  Map<String, String> account;
 	
+	public static void main(String[] args) {
+		try {
+			System.out.println(doSend("51860414133744", "view"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static String doSend(String orderNumber,String act) throws Exception {
 		
 		Map<String, String> item = new HashMap<String, String>();  

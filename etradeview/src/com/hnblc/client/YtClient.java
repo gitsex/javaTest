@@ -22,7 +22,7 @@ public class YtClient {
 	
 	public static void main(String[] args)  {
 		try {
-			doGet("51860414133744");
+			System.out.println(doGet("51860408322270"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
