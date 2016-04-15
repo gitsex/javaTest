@@ -148,6 +148,7 @@ public class OrderClient {
 		        Double  totalgoodsprice=0.00;
 		        Double  totalgoodspricereal=0.00;
 		        Double  totalgoodvaluesreal=0.00;
+		        Double  totalamount=0.00;
 		        //优惠券总额
 		        Double  BonusAmount=Double.valueOf(item.get("BonusAmount"));
 		        
@@ -170,9 +171,10 @@ public class OrderClient {
 		        		Double  perDiscount =Double.valueOf(goodsitem.get("price"))/totalgoodsprice*BonusAmount;
 		        		perDiscount = Double.valueOf(df.format(perDiscount));
 		        		perDiscountTotal +=perDiscount;
-		        		totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))));
+		        		totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
 		        		totalgoodspricereal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount));
-		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee")))); 
+		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+		        		totalamount +=Double.valueOf(goodsitem.get("discount"));
 		            }
 		        	
 		        	//平摊之后的误差
@@ -188,7 +190,7 @@ public class OrderClient {
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
 				orderXmlSb.append("<freight></freight>\n");//"+df.format(Double.valueOf(item.get("deliveryCost")))+"
-				orderXmlSb.append("<other></other>\n");
+				orderXmlSb.append("<other>"+df.format(totalamount)+"</other>\n");
 				orderXmlSb.append("<tax></tax>\n");
 				orderXmlSb.append("<customer>"+item.get("cosignee")+"</customer>\n");
 				

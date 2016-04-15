@@ -261,7 +261,7 @@ public class YtClient {
 	    	            //System.out.println(list.get(i)); 
 	    	        	
 	    	        	
-	    	        	totalgoodsprice += Double.valueOf(goodsitem.get("price"))-Double.valueOf(goodsitem.get("TaxFee"));//商品小计
+	    	        	totalgoodsprice += Double.valueOf(goodsitem.get("price"))-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"));//商品小计
 	    	        	//商品对照表
 	    	        	String goodsNo = DBsql.getGoodsMatch(goodsitem.get("productNumber"),account.get("shipper"));
 	    				
