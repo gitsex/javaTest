@@ -1,0 +1,14 @@
+#Wed Sep 09 13:46:27 CST 2015
+eclipse.preferences.version=1
+encoding//src/com/hnblc/client/CopyOfProcessStatus.java=UTF-8
+encoding//src/com/hnblc/client/ErpClient.java=UTF-8
+encoding//src/com/hnblc/client/LogisticsBack.java=UTF-8
+encoding//src/com/hnblc/client/LogisticsInfo.java=UTF-8
+encoding//src/com/hnblc/client/OrderStatus.java=UTF-8
+encoding//src/com/hnblc/client/ProcessStatus.java=UTF-8
+encoding//src/com/hnblc/client/SendEmail.java=UTF-8
+encoding//src/com/hnblc/utils/Curl.java=UTF-8
+encoding//src/com/hnblc/utils/DBsql.java=UTF-8
+encoding//src/com/hnblc/utils/MD5.java=UTF-8
+encoding//src/com/hnblc/utils/XML.java=UTF-8
+encoding/<project>=UTF-8
