@@ -190,7 +190,7 @@ public class OrderClient {
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
 				orderXmlSb.append("<freight></freight>\n");//"+df.format(Double.valueOf(item.get("deliveryCost")))+"
-				orderXmlSb.append("<other>"+df.format(totalamount)+"</other>\n");
+				orderXmlSb.append("<other>"+(totalamount==0.0?"":df.format(totalamount))+"</other>\n");
 				orderXmlSb.append("<tax></tax>\n");
 				orderXmlSb.append("<customer>"+item.get("cosignee")+"</customer>\n");
 				
