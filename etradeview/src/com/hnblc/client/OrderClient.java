@@ -39,7 +39,7 @@ public class OrderClient {
 	
 	public static void main(String[] args) {
 		try {
-			System.out.println(doSend("51860414133744", "view"));
+			System.out.println(doSend("51860407370681", "view"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,7 +172,6 @@ public class OrderClient {
 		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
 		        		totalamount +=Double.valueOf(goodsitem.get("discount"));
 		            }
-		        	
 		        	//平摊之后的误差
 		         Double perDiscountDiff = perDiscountTotal - BonusAmount;
 		        	//补差在最后一个商品上
@@ -186,7 +185,7 @@ public class OrderClient {
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
 				orderXmlSb.append("<freight></freight>\n");//"+df.format(Double.valueOf(item.get("deliveryCost")))+"
-				orderXmlSb.append("<other>"+df.format(totalamount)+"</other>\n");
+				orderXmlSb.append("<other>"+(totalamount==0.0?"":df.format(totalamount))+"</other>\n");
 				orderXmlSb.append("<tax></tax>\n");
 				orderXmlSb.append("<customer>"+item.get("cosignee")+"</customer>\n");
 				
