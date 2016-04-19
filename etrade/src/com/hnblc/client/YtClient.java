@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -188,7 +189,7 @@ public class YtClient {
 	
 	//生成报文
 	public static String getXml(List<Map<String, String>> Order,String batchNumber) {
-		 
+		DecimalFormat df = new DecimalFormat("#.00");
 		SimpleDateFormat  sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat  sdf2 = new SimpleDateFormat("yyyyMMdd");
 		Long  nowtimestamp=new Date().getTime();
@@ -219,7 +220,11 @@ public class YtClient {
 	    		  xml.append("\n  <totalLogisticsNo></totalLogisticsNo>");
 	    		  xml.append("\n  <subLogisticsNo></subLogisticsNo>");
 	    		  xml.append("\n  <logisticsNo></logisticsNo>");
-	    		  xml.append("\n  <orderNo>"+item.get("orderNumber")+"</orderNo>"); 
+	    		  if("普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
+	    			  xml.append("\n  <orderNo>"+"T2700P"+item.get("orderNumber")+"</orderNo>"); 
+			      }else{
+			    	  xml.append("\n  <orderNo>"+item.get("orderNumber")+"</orderNo>"); 
+			      }
 	    		  xml.append("\n  <platformCode>"+account.get("companyCode")+"</platformCode>");
 	    		  xml.append("\n  <platformName>"+account.get("companyName")+"</platformName>");
 	    		  xml.append("\n  <platformCodeCiq>"+account.get("companyCode")+"</platformCodeCiq>");   
@@ -260,8 +265,11 @@ public class YtClient {
 	    	        	Map<String, String> goodsitem = ordergoods.get(i);  
 	    	            //System.out.println(list.get(i)); 
 	    	        	
-	    	        	
-	    	        	totalgoodsprice += Double.valueOf(goodsitem.get("price"))-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"));//商品小计
+	    	        	if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))||"易恒健康（海外）".equalsIgnoreCase(account.get("shopName"))){
+	    	        	      totalgoodsprice += Double.valueOf(goodsitem.get("price"))-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"));//商品小计
+	    	        	}else{
+	    	        		totalgoodsprice += Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))/1.119));
+	    	        	}
 	    	        	//商品对照表
 	    	        	String goodsNo = DBsql.getGoodsMatch(goodsitem.get("productNumber"),account.get("shipper"));
 	    				

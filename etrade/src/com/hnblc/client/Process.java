@@ -16,9 +16,9 @@ public class Process {
 	 */
 	public static void main(String[] args) {
 		
-//        String batchNumber ="YPG20160415020";
-		 String batchNumber = DBsql.readBatchNumber();
-		 System.out.println(batchNumber);
+        String batchNumber ="YD20160414020";
+//		 String batchNumber = DBsql.readBatchNumber();
+//		 System.out.println(batchNumber);
 		
 		//申通谁送
 //	    List<Map<String, String>> Order =DBsql.getOrderList("where is_lock=0 AND Ismatch=1 AND batchNumber='"+batchNumber+"' AND  logisticsExchangeStatus=0 AND orderStatus='已确认' ORDER BY id DESC");

@@ -193,8 +193,11 @@ public class OrderClient {
 		         Double charge = totalgoodspricereal+Double.valueOf(item.get("deliveryCost"));
 		      
 			    batchNumber = item.get("batchNumber");
-			    
-			    orderXmlSb.append("<orderNo>"+item.get("orderNumber")+"</orderNo>\n");
+			    if("普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
+			        orderXmlSb.append("<orderNo>"+"T2700P"+item.get("orderNumber")+"</orderNo>\n");
+			    }else{
+			    	 orderXmlSb.append("<orderNo>"+item.get("orderNumber")+"</orderNo>\n");
+			    }
 			   //货值+运费+其它费用+进口行邮税=总费用，必填
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
