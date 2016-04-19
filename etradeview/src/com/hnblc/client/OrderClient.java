@@ -39,7 +39,8 @@ public class OrderClient {
 	
 	public static void main(String[] args) {
 		try {
-			System.out.println(doSend("51860407370681", "view"));
+//			System.out.println(doSend("51860407370681", "view"));
+	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +96,8 @@ public class OrderClient {
 		xmlSb.append("\t\t<MsgType>O</MsgType>\n");
 		xmlSb.append("\t\t<OptType>"+IsSend+"</OptType>\n");
 		xmlSb.append("\t\t<Signature>").append(signature).append("</Signature>\n");//该字段为对订单报文加密后字符的签名
-		xmlSb.append("\t\t<CreatTime>2015-04-21 12:12:56</CreatTime>\n");
+//		xmlSb.append("\t\t<CreatTime>2015-04-21 12:12:56</CreatTime>\n");
+		xmlSb.append("\t\t<CreatTime>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"</CreatTime>\n");
 		xmlSb.append("\t</PubInfo>\n");
 		xmlSb.append("\t<DataInfo>").append(encryptDataInfo).append("</DataInfo>\n");//该字段为对订单进行RSA加密之后的密文
 		xmlSb.append("</Root>\n");
@@ -139,8 +141,7 @@ public class OrderClient {
 		        //计算商品小计总和 平摊金额
 		        Double  totalgoodsprice=0.00;
 		        Double  totalgoodspricereal=0.00;
-		        Double  totalgoodvaluesreal=0.00;
-		        Double  totalamount=0.00;
+		     
 		        //优惠券总额
 		        Double  BonusAmount=Double.valueOf(item.get("BonusAmount"));
 		        
@@ -155,6 +156,8 @@ public class OrderClient {
 		        //优惠平摊
 		        String[] priceList=null;
 		        Double  perDiscountTotal=0.00;
+		        Double  totalgoodvaluesreal=0.00;
+		        Double  totalamount=0.00;
 		        priceList=new String[20];
 		        	for(int i = 0; i < ordergoods.size(); i++)  
 		            {  
@@ -166,11 +169,18 @@ public class OrderClient {
 		        		System.out.println(perDiscount);
 		        		perDiscount = Double.valueOf(df.format(perDiscount));
 		        		perDiscountTotal +=perDiscount;
-		        		totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
-		        		totalgoodspricereal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount));
+		        		
 //		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount)); 
-		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
-		        		totalamount +=Double.valueOf(goodsitem.get("discount"));
+		        		totalgoodspricereal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount));
+		        	    if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))||"易恒健康（海外）".equalsIgnoreCase(account.get("shopName"))){
+		        	    	
+		        	    	totalamount +=Double.valueOf(goodsitem.get("discount"));
+		        	    	totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
+			        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+		        	    }else{
+		        	    	totalgoodvaluesreal +=Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
+			        		priceList[i]=String.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119)); 
+		        	    }
 		            }
 		        	//平摊之后的误差
 		         Double perDiscountDiff = perDiscountTotal - BonusAmount;
@@ -179,7 +189,7 @@ public class OrderClient {
 		         Double charge = totalgoodspricereal+Double.valueOf(item.get("deliveryCost"));
 		      
 			    batchNumber = item.get("batchNumber");
-			    
+			   
 			    orderXmlSb.append("<orderNo>"+item.get("orderNumber")+"</orderNo>\n");
 			   //货值+运费+其它费用+进口行邮税=总费用，必填
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
@@ -188,7 +198,7 @@ public class OrderClient {
 				orderXmlSb.append("<other>"+(totalamount==0.0?"":df.format(totalamount))+"</other>\n");
 				orderXmlSb.append("<tax></tax>\n");
 				orderXmlSb.append("<customer>"+item.get("cosignee")+"</customer>\n");
-				
+			 
 				orderXmlSb.append("<shipper>"+account.get("shipper")+"</shipper>\n");
 				orderXmlSb.append("<shipperAddress>"+account.get("shipperAddress")+"</shipperAddress>\n");
 				orderXmlSb.append("<shipperTelephone>"+account.get("shipperTelephone")+"</shipperTelephone>\n");
@@ -346,28 +356,11 @@ public class OrderClient {
 
 				
 				
-//				orderXmlSb.append("<OrderPaymentLogistics>\n");
-//				orderXmlSb.append("<paymentCode>P0001</paymentCode>\n");//P0001支付宝
-//				orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
-//				orderXmlSb.append("<paymentType></paymentType>\n");
-//				orderXmlSb.append("<paymentNo>3454655734279</paymentNo>\n");
-				
-//				orderXmlSb.append("<paymentCode></paymentCode>\n");//P0001支付宝 没有支付就留空
-//				orderXmlSb.append("<paymentName></paymentName>\n");
-//				orderXmlSb.append("<paymentType></paymentType>\n");
-//				orderXmlSb.append("<paymentNo></paymentNo>\n");
-				
-				if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))){
-					orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
-					orderXmlSb.append("<paymentName></paymentName>\n");
-					orderXmlSb.append("<paymentType></paymentType>\n");
-					orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
-				}else{
-					orderXmlSb.append("<paymentCode>P0001</paymentCode>\n");//P0001支付宝
-					orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
-					orderXmlSb.append("<paymentType></paymentType>\n");
-					orderXmlSb.append("<paymentNo>3454655734279</paymentNo>\n");
-				}
+				orderXmlSb.append("<OrderPaymentLogistics>\n");
+				orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
+				orderXmlSb.append("<paymentName></paymentName>\n");
+				orderXmlSb.append("<paymentType></paymentType>\n");
+				orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
 				
 				
 				orderXmlSb.append("<logisticsCodeCiq>"+account.get("logisticsCodeCiq")+"</logisticsCodeCiq>\n");

@@ -147,8 +147,7 @@ public class OrderClient {
 		        //计算商品小计总和 平摊金额
 		        Double  totalgoodsprice=0.00;
 		        Double  totalgoodspricereal=0.00;
-		        Double  totalgoodvaluesreal=0.00;
-		        Double  totalamount=0.00;
+		        
 		        //优惠券总额
 		        Double  BonusAmount=Double.valueOf(item.get("BonusAmount"));
 		        
@@ -163,18 +162,28 @@ public class OrderClient {
 		        //优惠平摊
 		        String[] priceList=null;
 		        Double  perDiscountTotal=0.00;
+		        Double  totalgoodvaluesreal=0.00;
+		        Double  totalamount=0.00;
 		        priceList=new String[20];
 		        	for(int i = 0; i < ordergoods.size(); i++)  
 		            {  
-		        		Map<String, String> goodsitem = ordergoods.get(i);  
-		        		
+	                    Map<String, String> goodsitem = ordergoods.get(i);  
 		        		Double  perDiscount =Double.valueOf(goodsitem.get("price"))/totalgoodsprice*BonusAmount;
+		        		
 		        		perDiscount = Double.valueOf(df.format(perDiscount));
 		        		perDiscountTotal +=perDiscount;
-		        		totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
+		        		
+//		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount)); 
 		        		totalgoodspricereal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount));
-		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
-		        		totalamount +=Double.valueOf(goodsitem.get("discount"));
+		        	    if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))||"易恒健康（海外）".equalsIgnoreCase(account.get("shopName"))){
+		        	    	
+		        	    	totalamount +=Double.valueOf(goodsitem.get("discount"));
+		        	    	totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
+			        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+		        	    }else{
+		        	    	totalgoodvaluesreal +=Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
+			        		priceList[i]=String.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119)); 
+		        	    }
 		            }
 		        	
 		        	//平摊之后的误差
@@ -352,24 +361,11 @@ public class OrderClient {
 				
 				
 				orderXmlSb.append("<OrderPaymentLogistics>\n");
-//				orderXmlSb.append("<paymentCode></paymentCode>\n");//P0001支付宝 没有支付就留空
-//				orderXmlSb.append("<paymentName></paymentName>\n");
-//				orderXmlSb.append("<paymentType></paymentType>\n");
-//				orderXmlSb.append("<paymentNo></paymentNo>\n");
-				
-//				if("京东:普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))||"Healthspan海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
-				if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))){
-					orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
-					orderXmlSb.append("<paymentName></paymentName>\n");
-					orderXmlSb.append("<paymentType></paymentType>\n");
-					orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
-				}else{
-					orderXmlSb.append("<paymentCode>P0001</paymentCode>\n");//P0001支付宝
-					orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
-					orderXmlSb.append("<paymentType></paymentType>\n");
-					orderXmlSb.append("<paymentNo>3454655734279</paymentNo>\n");
-				}
-				
+
+				orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
+				orderXmlSb.append("<paymentName></paymentName>\n");
+				orderXmlSb.append("<paymentType></paymentType>\n");
+				orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
 				
 				
 				

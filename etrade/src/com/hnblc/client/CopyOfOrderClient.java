@@ -148,6 +148,7 @@ public class CopyOfOrderClient {
 		        Double  totalgoodsprice=0.00;
 		        Double  totalgoodspricereal=0.00;
 		        Double  totalgoodvaluesreal=0.00;
+		        Double  totalamount=0.00;
 		        //优惠券总额
 		        Double  BonusAmount=Double.valueOf(item.get("BonusAmount"));
 		        
@@ -170,9 +171,10 @@ public class CopyOfOrderClient {
 		        		Double  perDiscount =Double.valueOf(goodsitem.get("price"))/totalgoodsprice*BonusAmount;
 		        		perDiscount = Double.valueOf(df.format(perDiscount));
 		        		perDiscountTotal +=perDiscount;
-		        		totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))));
+		        		totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
 		        		totalgoodspricereal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount));
-		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee")))); 
+		        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+		        		totalamount +=Double.valueOf(goodsitem.get("discount"));
 		            }
 		        	
 		        	//平摊之后的误差
@@ -188,7 +190,7 @@ public class CopyOfOrderClient {
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
 				orderXmlSb.append("<freight></freight>\n");//"+df.format(Double.valueOf(item.get("deliveryCost")))+"
-				orderXmlSb.append("<other></other>\n");
+				orderXmlSb.append("<other>"+(totalamount==0.0?"":df.format(totalamount))+"</other>\n");
 				orderXmlSb.append("<tax></tax>\n");
 				orderXmlSb.append("<customer>"+item.get("cosignee")+"</customer>\n");
 				
@@ -355,19 +357,21 @@ public class CopyOfOrderClient {
 //				orderXmlSb.append("<paymentType></paymentType>\n");
 //				orderXmlSb.append("<paymentNo></paymentNo>\n");
 				
-//				if("京东:普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))||"Healthspan海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
-				if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))){
-					orderXmlSb.append("<paymentCode>"+item.get("pay_id")+"</paymentCode>\n");//P0001支付宝
-					orderXmlSb.append("<paymentName></paymentName>\n");
-					orderXmlSb.append("<paymentType></paymentType>\n");
-					orderXmlSb.append("<paymentNo>"+item.get("pay_account")+"</paymentNo>\n");
-				}else{
-					orderXmlSb.append("<paymentCode>P0001</paymentCode>\n");//P0001支付宝
-					orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
-					orderXmlSb.append("<paymentType></paymentType>\n");
-					orderXmlSb.append("<paymentNo>3454655734279</paymentNo>\n");
-				}
-				
+//				if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))){
+//					orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
+//					orderXmlSb.append("<paymentName></paymentName>\n");
+//					orderXmlSb.append("<paymentType></paymentType>\n");
+//					orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
+//				}else{
+//					orderXmlSb.append("<paymentCode>P0001</paymentCode>\n");//P0001支付宝
+//					orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
+//					orderXmlSb.append("<paymentType></paymentType>\n");
+//					orderXmlSb.append("<paymentNo>3454655734279</paymentNo>\n");
+//				}
+				orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
+				orderXmlSb.append("<paymentName></paymentName>\n");
+				orderXmlSb.append("<paymentType></paymentType>\n");
+				orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
 				
 				
 				
