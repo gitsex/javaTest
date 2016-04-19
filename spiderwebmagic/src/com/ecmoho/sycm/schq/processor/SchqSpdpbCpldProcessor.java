@@ -40,7 +40,7 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
 //	@Resource(name="schqCpfxCpphProcessor")
 //  private SchqCpfxCpphProcessor schqCpfxCpphProcessor;
 	
-	public  void start(SchqSpdpbCpldProcessor schqSpdpbPpldProcessor){
+	public  void start(SchqSpdpbCpldProcessor schqSpdpbCpldProcessor){
 		
 		 //获取店铺列表
   		 List<Map<String, Object>> taskList=schqDbcom.getSpidersTaskList("sycm");
@@ -51,9 +51,9 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
   				 String account=StringUtil.objectVerString(taskMap.get("account"));
   				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
   				 schqHeaderBean.setCookie(refer_cookie);
-//  			 'spdpb-ppld-rxsp','spdpb-ppld-llsp','spdpb-ppld-rxdp','spdpb-ppld-lldp'
+//  			 'spdpb-cpld-rxsp','spdpb-cpld-llsp'
   				 //遍历商品店铺榜_产品粒度
-  				 List<HashMap<String,String>> urlSpdpbCpLdList=schqSpdpbCpldExploration.getSpdpbCpldUrlList(account,"'spdpb-ppld-lldp'");
+  				 List<HashMap<String,String>> urlSpdpbCpLdList=schqSpdpbCpldExploration.getSpdpbCpldUrlList(account,"'spdpb-cpld-llsp'");
   				 System.out.println("urlSpdpbCpLdList.size()："+urlSpdpbCpLdList.size());
   			     for(int j=0;j<urlSpdpbCpLdList.size();j++){
   			    	 Map<String,String> map=urlSpdpbCpLdList.get(j);
@@ -65,7 +65,7 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-  			    	Spider.create(schqSpdpbPpldProcessor).addUrl(map.get("targetUrl")).run();
+  			    	Spider.create(schqSpdpbCpldProcessor).addUrl(map.get("targetUrl")).run();
   			     }
   			 }
   		 }
@@ -73,8 +73,8 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
 	
 	public static void main(String[] args) {
 		ApplicationContext ac =new ClassPathXmlApplicationContext("conf/applicationContext.xml");
-		SchqSpdpbCpldProcessor schqSpdpbPpldProcessor=(SchqSpdpbCpldProcessor) ac.getBean("schqSpdpbPpldProcessor");
-		schqSpdpbPpldProcessor.start(schqSpdpbPpldProcessor);
+		SchqSpdpbCpldProcessor schqSpdpbCpldProcessor=(SchqSpdpbCpldProcessor) ac.getBean("schqSpdpbCpldProcessor");
+		schqSpdpbCpldProcessor.start(schqSpdpbCpldProcessor);
 	}
 	@Override
 	public Site getSite() {
@@ -103,22 +103,14 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
 	       }
 	       
 		   switch (childAccount) {
-		       //商品店铺榜_行业粒度_热销商品榜
-		       case "spdpb-ppld-rxsp":
-		    	       schqDbcom.addList(dataList, "commodityshop_brand_hotcommodityranking");
+		       //商品店铺榜_产品粒度_热销商品榜
+		       case "spdpb-cpld-rxsp":
+		    	       schqDbcom.addList(dataList, "commodityshop_product_hotcommodityranking");
 			           break;
-			   //商品店铺榜_行业粒度_流量商品榜     
-		       case "spdpb-ppld-llsp":
-				      schqDbcom.addList(dataList, "commodityshop_brand_flowcommodityranking");  
+			   //商品店铺帮_产品粒度_流量商品榜 
+		       case "spdpb-cpld-llsp":
+				      schqDbcom.addList(dataList, "commodityshop_product_flowcommodityranking");  
 			          break;
-			   //商品店铺榜_行业粒度_热销店铺榜     
-		       case "spdpb-ppld-rxdp":
-		    	      schqDbcom.addList(dataList, "commodityshop_brand_hotshopranking");  
-			          break;
-			   //商品店铺榜_行业粒度_流量店铺榜   
-		       case "spdpb-ppld-lldp":
-		    	       schqDbcom.addList(dataList, "commodityshop_brand_flowshopranking");  
-			           break;
 		       default:
 			           break;
 	        }
@@ -127,6 +119,7 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
     //获取数据附加信息
     public static Map<String,String> getDataMap(Map<String,String> dataMap,Map<String,String> urlMap){
  	       dataMap=new HashMap<String,String>();
+
 		   dataMap.put("accountid",urlMap.get("accountid"));
 		   dataMap.put("create_at", urlMap.get("create_at"));
 		   dataMap.put("level", urlMap.get("level"));
@@ -135,6 +128,9 @@ public class SchqSpdpbCpldProcessor extends  SchqProcessor{
 		   dataMap.put("item3", urlMap.get("item3"));
 		   dataMap.put("brandId", urlMap.get("brandId"));
 		   dataMap.put("brandName", urlMap.get("brandName"));
+		   dataMap.put("modelId", urlMap.get("modelId"));
+		   dataMap.put("modelName", urlMap.get("modelName"));
+		   dataMap.put("spuId", urlMap.get("spuId"));
 		   dataMap.put("device", urlMap.get("device"));
 		   dataMap.put("seller", urlMap.get("seller"));
 		   dataMap.put("log_at", urlMap.get("log_at"));

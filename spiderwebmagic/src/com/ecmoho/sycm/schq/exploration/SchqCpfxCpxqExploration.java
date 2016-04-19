@@ -62,13 +62,13 @@ public class SchqCpfxCpxqExploration{
 			    for(Map<String,String> mlMap:hymlList){
 			    	 String cateId=mlMap.get("id");
 			    	 //获取产品详情——品牌列表
-			    	 Map<String,String> pplbMap=getCpfxCpxqPplb(schqDbcom, schqHeaderBean, cateId, yesterdayday);
+			    	 Map<String,String> pplbMap=SchqUrlUtil.getPplb(schqDbcom, schqHeaderBean, cateId, yesterdayday);
 			    	 //遍历品牌
 			    	 for(Entry<String, String> pplbEntry:pplbMap.entrySet()){
 			    		 String brandId=pplbEntry.getKey();//品牌ID
 			    	     String brandName=pplbEntry.getValue();//品牌名称
 			    	     //获取产品详情--品牌列表--产品列表
-			    	     List<HashMap<String,String>> cplbList=getCpfxCpxqModels(schqDbcom, schqHeaderBean, cateId, brandId,yesterdayday);
+			    	     List<HashMap<String,String>> cplbList=SchqUrlUtil.getCpfxCpxqModels(schqDbcom, schqHeaderBean, cateId, brandId,yesterdayday);
 			    	     //遍历产品列表
 			    	     for(int i=0;cplbList!=null&&i<cplbList.size();i++){
 			    	    	 String modelId=cplbList.get(i).get("modelId");
@@ -108,39 +108,4 @@ public class SchqCpfxCpxqExploration{
 	     }
 		return urlList;
 	}
-	//获取产品分析--产品详情--品牌列表
-	public static Map<String,String> getCpfxCpxqPplb(SchqDbcom schqDbcom,HeaderBean schqHeaderBean,String cateId,String yesterdayday){
-		Map<String,String> dataMap=new HashMap<String,String>();
-		Map<String, Object> pplbMap=schqDbcom.getSpiderChild("cpfx-cpxq-pplb");
-		String cpxqPplbUrl=StringUtil.objectVerString(pplbMap.get("geturl"));
-		String cpxqPplbTargetUrl=cpxqPplbUrl.replaceAll("##D##", yesterdayday).replaceAll("##CID##", cateId);
-		String cpxqPplbResult=UrlUtil.getUrlString(schqHeaderBean, cpxqPplbTargetUrl);
-		JSONObject jsonObject=JSON.parseObject(cpxqPplbResult);
-		JSONArray jsonArray=jsonObject.getJSONObject("content").getJSONArray("data");
-	    for(int i=0;jsonArray!=null&&i<jsonArray.size();i++){
-	    	JSONObject dataObject=jsonArray.getJSONObject(i);
-	    	dataMap.put(dataObject.getString("brandId"), dataObject.getString("brandName"));
-	    } 
-		return dataMap;
-	}
-	//获取产品分析--产品详情--品牌列表
-		public static List<HashMap<String,String>> getCpfxCpxqModels(SchqDbcom schqDbcom,HeaderBean schqHeaderBean,String cateId,String brandId,String yesterdayday){
-			List<HashMap<String, String>> dataList=new ArrayList<HashMap<String,String>>();
-			HashMap<String,String> dataMap=null;
-			Map<String, Object> pplbMap=schqDbcom.getSpiderChild("cpfx-cpxq-cplb");
-			String cpxqPplbUrl=StringUtil.objectVerString(pplbMap.get("geturl"));
-			String cpxqPplbTargetUrl=cpxqPplbUrl.replaceAll("##D##", yesterdayday).replaceAll("##CID##", cateId).replaceAll("##BID##", brandId);
-			String cpxqPplbResult=UrlUtil.getUrlString(schqHeaderBean, cpxqPplbTargetUrl);
-			JSONObject jsonObject=JSON.parseObject(cpxqPplbResult);
-			JSONArray jsonArray=jsonObject.getJSONObject("content").getJSONArray("data");
-		    for(int i=0;jsonArray!=null&&i<jsonArray.size();i++){
-		    	dataMap=new HashMap<String,String>();
-		    	JSONObject dataObject=jsonArray.getJSONObject(i);
-		    	dataMap.put("modelId",dataObject.getString("modelId"));
-		    	dataMap.put("modelName",dataObject.getString("modelName"));
-		    	dataMap.put("spuId",dataObject.getString("spuId"));
-		    	dataList.add(dataMap);
-		    } 
-			return dataList;
-		}
 }
