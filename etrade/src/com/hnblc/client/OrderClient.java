@@ -165,6 +165,7 @@ public class OrderClient {
 		        Double  totalgoodvaluesreal=0.00;
 		        Double  totalamount=0.00;
 		        priceList=new String[20];
+		        Double charge = 0.00;
 		        	for(int i = 0; i < ordergoods.size(); i++)  
 		            {  
 	                    Map<String, String> goodsitem = ordergoods.get(i);  
@@ -180,9 +181,11 @@ public class OrderClient {
 		        	    	totalamount +=Double.valueOf(goodsitem.get("discount"));
 		        	    	totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
 			        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+			        		charge = totalgoodspricereal;
 		        	    }else{
 		        	    	totalgoodvaluesreal +=Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
 			        		priceList[i]=String.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119)); 
+			        		charge = totalgoodspricereal+Double.valueOf(item.get("deliveryCost"));
 		        	    }
 		            }
 		        	
@@ -190,7 +193,6 @@ public class OrderClient {
 		         Double perDiscountDiff = perDiscountTotal - BonusAmount;
 		        	//补差在最后一个商品上
 		         priceList[ordergoods.size()-1] = String.valueOf(Double.valueOf(priceList[ordergoods.size()-1])+perDiscountDiff);  	
-		         Double charge = totalgoodspricereal+Double.valueOf(item.get("deliveryCost"));
 		      
 			    batchNumber = item.get("batchNumber");
 			    if("普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
