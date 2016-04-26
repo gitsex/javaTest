@@ -220,11 +220,7 @@ public class YtClient {
 	    		  xml.append("\n  <totalLogisticsNo></totalLogisticsNo>");
 	    		  xml.append("\n  <subLogisticsNo></subLogisticsNo>");
 	    		  xml.append("\n  <logisticsNo></logisticsNo>");
-	    		  if("普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
-	    			  xml.append("\n  <orderNo>"+"T2700P"+item.get("orderNumber")+"</orderNo>"); 
-			      }else{
-			    	  xml.append("\n  <orderNo>"+item.get("orderNumber")+"</orderNo>"); 
-			      }
+			      xml.append("\n  <orderNo>"+item.get("orderNumber")+"</orderNo>"); 
 	    		  xml.append("\n  <platformCode>"+account.get("companyCode")+"</platformCode>");
 	    		  xml.append("\n  <platformName>"+account.get("companyName")+"</platformName>");
 	    		  xml.append("\n  <platformCodeCiq>"+account.get("companyCode")+"</platformCodeCiq>");   
@@ -259,16 +255,30 @@ public class YtClient {
 	    		  
 	    		  Double  totalgoodsprice=0.00;
 	    		  String goodsname = "";
+	    		  Double totalworth=0.00;
+	    		  //优惠券总额
+			      Double  BonusAmount=Double.valueOf(item.get("BonusAmount"));
 	    		  List<Map<String, String>> ordergoods =DBsql.getOrderGoodsList("where orderNumber='"+item.get("orderNumber")+"'");
-	    	        for(int i = 0; i < ordergoods.size(); i++)  
+	    		//计算商品总价
+			        for(int i = 0; i < ordergoods.size(); i++)  
+			        {  
+			        	Map<String, String> goodsitem = ordergoods.get(i);  
+			        	totalgoodsprice += Double.valueOf(goodsitem.get("price"));//商品小计
+			        }  
+	    		  for(int i = 0; i < ordergoods.size(); i++)  
 	    	        {  
 	    	        	Map<String, String> goodsitem = ordergoods.get(i);  
 	    	            //System.out.println(list.get(i)); 
 	    	        	
+	    	        	Double  perDiscount =Double.valueOf(goodsitem.get("price"))/totalgoodsprice*BonusAmount;
+		        		System.out.println(perDiscount);
+		        		perDiscount = Double.valueOf(df.format(perDiscount));
+	    	        	
 	    	        	if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))||"易恒健康（海外）".equalsIgnoreCase(account.get("shopName"))){
-	    	        	      totalgoodsprice += Double.valueOf(goodsitem.get("price"))-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"));//商品小计
+//	    	        	      totalgoodsprice += Double.valueOf(goodsitem.get("price"))-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"));//商品小计
+	    	        		totalworth += Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
 	    	        	}else{
-	    	        		totalgoodsprice += Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))/1.119));
+	    	        		totalworth += Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
 	    	        	}
 	    	        	//商品对照表
 	    	        	String goodsNo = DBsql.getGoodsMatch(goodsitem.get("productNumber"),account.get("shipper"));
@@ -306,7 +316,7 @@ public class YtClient {
 	    					
 	    				}
 	    	        }	
-	    		  xml.append("\n  <worth>"+totalgoodsprice+"</worth>");
+	    		  xml.append("\n  <worth>"+totalworth+"</worth>");
 	    		  xml.append("\n  <currCode></currCode>");
 	    		  xml.append("\n  <grossWeight>1.00</grossWeight>");
 	    		  xml.append("\n  <quantity>"+ordergoods.size()+"</quantity>");
