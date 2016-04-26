@@ -39,7 +39,7 @@ public class OrderClient {
 	
 	public static void main(String[] args) {
 		try {
-			System.out.println(doSend("51860418118614", "view"));
+			System.out.println(doSend("T2700P1824248321556802", "view"));
 	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -160,6 +160,7 @@ public class OrderClient {
 		        Double  totalamount=0.00;
 		        priceList=new String[20];
 		        Double charge =0.00;
+		        Double tax=0.00;
 		        	for(int i = 0; i < ordergoods.size(); i++)  
 		            {  
 		        		Map<String, String> goodsitem = ordergoods.get(i);  
@@ -175,15 +176,21 @@ public class OrderClient {
 		        		totalgoodspricereal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount));
 		        	    if("APPLE（保税）".equalsIgnoreCase(account.get("shopName"))||"易恒健康（海外）".equalsIgnoreCase(account.get("shopName"))){
 		        	    	
-		        	    	totalamount +=Double.valueOf(goodsitem.get("discount"));
-		        	    	totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
-			        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+//		        	    	totalamount +=Double.valueOf(goodsitem.get("discount"));
+//		        	    	totalgoodvaluesreal +=Double.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount"))));
+//			        		priceList[i]=String.valueOf(df.format(Double.valueOf(goodsitem.get("price"))+perDiscount-Double.valueOf(goodsitem.get("TaxFee"))-Double.valueOf(goodsitem.get("discount")))); 
+//			        		charge = totalgoodspricereal;
+			        		totalamount +=Double.valueOf(goodsitem.get("discount"));
+		        	    	totalgoodvaluesreal +=Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
+			        		priceList[i]=String.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119)); 
 			        		charge = totalgoodspricereal;
-		        	    
+		        	        tax=totalgoodspricereal-totalgoodvaluesreal;
 		        	    }else{
 		        	    	totalgoodvaluesreal +=Double.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119));
 			        		priceList[i]=String.valueOf(df.format((Double.valueOf(goodsitem.get("price"))+perDiscount)/1.119)); 
 			        		charge = totalgoodspricereal+Double.valueOf(item.get("deliveryCost"));
+			        		totalamount=perDiscountTotal;
+			        		tax=totalgoodspricereal-totalgoodvaluesreal;
 		        	    }
 		            }
 		        	//平摊之后的误差
@@ -192,18 +199,14 @@ public class OrderClient {
 		         priceList[ordergoods.size()-1] = String.valueOf(Double.valueOf(priceList[ordergoods.size()-1])+perDiscountDiff);  	
 		      
 			    batchNumber = item.get("batchNumber");
-			   
-			    if("普丽普莱海外旗舰店".equalsIgnoreCase(account.get("shopName"))){
-			        orderXmlSb.append("<orderNo>"+"T2700P"+item.get("orderNumber")+"</orderNo>\n");
-			    }else{
-			    	 orderXmlSb.append("<orderNo>"+item.get("orderNumber")+"</orderNo>\n");
-			    }
+
+			    orderXmlSb.append("<orderNo>"+item.get("orderNumber")+"</orderNo>\n");
 			   //货值+运费+其它费用+进口行邮税=总费用，必填
 				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
 				orderXmlSb.append("<freight></freight>\n");//"+df.format(Double.valueOf(item.get("deliveryCost")))+"
-				orderXmlSb.append("<other>"+(totalamount==0.0?"":df.format(totalamount))+"</other>\n");
-				orderXmlSb.append("<tax></tax>\n");
+				orderXmlSb.append("<other>"+(totalamount==0.00?"":df.format(totalamount))+"</other>\n");
+				orderXmlSb.append("<tax>"+(tax==0.00?"":df.format(tax))+"</tax>\n");
 				orderXmlSb.append("<customer>"+item.get("cosignee")+"</customer>\n");
 			 
 				orderXmlSb.append("<shipper>"+account.get("shipper")+"</shipper>\n");
@@ -365,7 +368,7 @@ public class OrderClient {
 				
 				orderXmlSb.append("<OrderPaymentLogistics>\n");
 				orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
-				orderXmlSb.append("<paymentName></paymentName>\n");
+				orderXmlSb.append("<paymentName>"+("P0001".equalsIgnoreCase(item.get("pay_account"))?"支付宝（中国）网络技术有限公司":"")+"</paymentName>\n");
 				orderXmlSb.append("<paymentType></paymentType>\n");
 				orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
 				
