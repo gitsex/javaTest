@@ -53,8 +53,9 @@ public class SchqRqhxSellerProcessor extends  SchqProcessor{
 				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
 				 schqHeaderBean.setCookie(refer_cookie);
 				 //星级分布，省份分布，卖家分布
+				 
 				 //'rqhx-seller-xjfb','rqhx-seller-sffb','rqhx-seller-mjfb'
-				 List<HashMap<String,String>> urlHyzbList=schqRqhxSellerExploration.getRqhxSellerUrlList(account,"'rqhx-seller-mjfb'");
+				 List<HashMap<String,String>> urlHyzbList=schqRqhxSellerExploration.getRqhxSellerUrlList(account,"'rqhx-seller-xjfb'");
 				 System.out.println(urlHyzbList.size());
 			     for(int j=0;j<urlHyzbList.size();j++){
 			    	 Map<String,String> map=urlHyzbList.get(j);
@@ -101,7 +102,6 @@ public class SchqRqhxSellerProcessor extends  SchqProcessor{
 			   schqDbcom.addList(dataList, "crowdportrait_sellerportrait_sellerleveldistribute");
 			   break;
 		   case "rqhx-seller-sffb"://人群画像_卖家人群_省份分布
-			  
 			   schqDbcom.addList(dataList, "crowdportrait_sellerportrait_sellerprovincepercent");
 			   break;
 		   case "rqhx-seller-mjfb"://人群画像_卖家人群_卖家分布
