@@ -24,7 +24,7 @@ public class BaseDbcom {
 	    		  return;
 	    	  }
 	    	  String sql="insert into "+tableName+" ("+keysb.substring(0, keysb.length()-1)+") values ("+valuesb.substring(0, valuesb.length()-1)+")";
-	    	  System.out.println(sql);
+//	    	  System.out.println(sql);
 	    	  jdbcTemplate.update(sql);
 	  	}
 	      //批量数据插入

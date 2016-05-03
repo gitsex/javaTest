@@ -8,31 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
-
 import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.base.bean.HeaderBean;
-import com.ecmoho.sycm.schq.dao.SchqDbcom;
-
-
 /**
  * @author gusy
  * 市场行情--品牌分析——品牌详情
  */
 @Component("schqPpfxPpxqExploration")
-public class SchqPpfxPpxqExploration{
-	@Resource(name="schqDbcom")
-    private SchqDbcom schqDbcom;
+public class SchqPpfxPpxqExploration extends SchqExploration{
 	
-	@Resource(name="schqHeaderBean")
-	private  HeaderBean schqHeaderBean;
-	
-	private int days=1;
-	
-	public List<HashMap<String,String>> getPpfxPpxqUrlList(String account,String childAccountArr) {
+	@Override
+	public List<HashMap<String,String>> getUrlList(String account,String childAccountArr,int days) {
 		 List<HashMap<String,String>> urlList=new ArrayList<HashMap<String,String>>();
 		 HashMap<String,String> urlMap=null;
 		 //存储日期

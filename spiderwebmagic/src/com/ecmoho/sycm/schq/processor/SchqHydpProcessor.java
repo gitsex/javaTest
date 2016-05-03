@@ -3,67 +3,43 @@ package com.ecmoho.sycm.schq.processor;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.base.bean.HeaderBean;
-import com.ecmoho.sycm.schq.dao.SchqDbcom;
-import com.ecmoho.sycm.schq.exploration.SchqHydpExploration;
+import com.ecmoho.sycm.schq.exploration.SchqExploration;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 /**
  * 
  * @author gusy
- * 行业直播schqhyzbprocessor
+ * 行业大盘_行业报表__SchqHydpProcessor
  */
 @Component("schqHydpProcessor")
-public class SchqHydpProcessor extends  SchqProcessor{
-//	@Resource(name="schqDbcom")
-//	private  SchqDbcom schqDbcom;
-//	@Resource(name="schqHeaderBean")
-//	private  HeaderBean schqHeaderBean;
-	@Resource(name="schqHydpExploration")
-	private SchqHydpExploration schqHydpExploration;
+public class SchqHydpProcessor extends SchqProcessor{
 	@Resource(name="schqHydpProcessor")
-    private SchqHydpProcessor schqHydpProcessor;
-	public  void start(){
-		
-		
-		 //获取店铺列表
-		 List<Map<String, Object>> taskList=schqDbcom.getSpidersTaskList("sycm");
-		 for(int i=0;taskList!=null&&i<taskList.size();i++){
-			 Map<String, Object> taskMap=taskList.get(i);
-			 String id=StringUtil.objectVerString(taskMap.get("id"));
-			 if(id.equals("26")){
-				 String account=StringUtil.objectVerString(taskMap.get("account"));
-				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
-				 schqHeaderBean.setCookie(refer_cookie);
-				 List<HashMap<String,String>> urlHyzbList=schqHydpExploration.getHydpUrlList(account,"hydp-hybb");
-				 System.out.println(urlHyzbList.size());
-			     for(int j=0;j<urlHyzbList.size();j++){
-			    	 Map<String,String> map=urlHyzbList.get(j);
-			    	 schqHeaderBean.setUrlMap(map);
-//			    	 System.out.println(map.get("targetUrl"));
-			    	 Spider.create(schqHydpProcessor).addUrl(map.get("targetUrl")).run();
-			     }
-			 }
-		 }
+	private SchqProcessor schqProcessor;
+	@Resource(name="schqHydpExploration")
+	private SchqExploration schqExploration;
+	@Value("9,11,12,13,23,26")
+	private String accountIdArr;
+	@Value("hydp-hybb")
+	private String childAccountArr;
+	@Value("1")
+	private int days;
+    
+	
+	public void run() {
+		super.start(schqProcessor, schqExploration,accountIdArr, childAccountArr, days);
 	}
-	public static void main(String[] args) {
-	}
+	
 	@Override
 	public Site getSite() {
 		return super.getSite();
@@ -91,9 +67,7 @@ public class SchqHydpProcessor extends  SchqProcessor{
 		   String indexCode=dataJsonObject.getString("indexCode");
 		   String currentValue=dataJsonObject.getString("currentValue");
 		   dataMap.put(indexCode,currentValue);
-		   
 	   }
 	   schqDbcom.add(dataMap, "industry_report");
-    	
 	}
 }

@@ -6,24 +6,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.sycm.schq.exploration.SchqSpdpbCpldExploration;
+import com.ecmoho.sycm.schq.exploration.SchqExploration;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 /**
  * 
  * @author gusy
@@ -31,51 +26,23 @@ import us.codecraft.webmagic.Spider;
  */
 @Component("schqSpdpbCpldProcessor")
 public class SchqSpdpbCpldProcessor extends  SchqProcessor{
-//	@Resource(name="schqDbcom")
-//	private  SchqDbcom schqDbcom;
-//	@Resource(name="schqHeaderBean")
-//	private  HeaderBean schqHeaderBean;
+	
+	@Resource(name="schqSpdpbCpldProcessor")
+	private SchqProcessor schqProcessor;
 	@Resource(name="schqSpdpbCpldExploration")
-	private SchqSpdpbCpldExploration schqSpdpbCpldExploration;
-//	@Resource(name="schqCpfxCpphProcessor")
-//  private SchqCpfxCpphProcessor schqCpfxCpphProcessor;
-	
-	public  void start(SchqSpdpbCpldProcessor schqSpdpbCpldProcessor){
-		
-		 //获取店铺列表
-  		 List<Map<String, Object>> taskList=schqDbcom.getSpidersTaskList("sycm");
-  		 for(int i=0;taskList!=null&&i<taskList.size();i++){
-  			 Map<String, Object> taskMap=taskList.get(i);
-  			 String id=StringUtil.objectVerString(taskMap.get("id"));
-  			 if(id.equals("11")){
-  				 String account=StringUtil.objectVerString(taskMap.get("account"));
-  				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
-  				 schqHeaderBean.setCookie(refer_cookie);
-//  			 'spdpb-cpld-rxsp','spdpb-cpld-llsp'
-  				 //遍历商品店铺榜_产品粒度
-  				 List<HashMap<String,String>> urlSpdpbCpLdList=schqSpdpbCpldExploration.getSpdpbCpldUrlList(account,"'spdpb-cpld-llsp'");
-  				 System.out.println("urlSpdpbCpLdList.size()："+urlSpdpbCpLdList.size());
-  			     for(int j=0;j<urlSpdpbCpLdList.size();j++){
-  			    	 Map<String,String> map=urlSpdpbCpLdList.get(j);
-  			    	 schqHeaderBean.setUrlMap(map);
-  			    	 System.out.println(map.get("targetUrl"));
-  			    	 try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-  			    	Spider.create(schqSpdpbCpldProcessor).addUrl(map.get("targetUrl")).run();
-  			     }
-  			 }
-  		 }
+	private SchqExploration schqExploration;
+	@Value("9,11,12,13,23,26")
+	private String accountIdArr;
+//	 'spdpb-cpld-rxsp','spdpb-cpld-llsp'
+	@Value("spdpb-cpld-rxsp,spdpb-cpld-llsp")
+	private String childAccountArr;
+	@Value("1")
+	private int days;
+    
+	public void run() {
+		super.start(schqProcessor, schqExploration,accountIdArr ,childAccountArr, days);
 	}
 	
-	public static void main(String[] args) {
-		ApplicationContext ac =new ClassPathXmlApplicationContext("conf/applicationContext.xml");
-		SchqSpdpbCpldProcessor schqSpdpbCpldProcessor=(SchqSpdpbCpldProcessor) ac.getBean("schqSpdpbCpldProcessor");
-		schqSpdpbCpldProcessor.start(schqSpdpbCpldProcessor);
-	}
 	@Override
 	public Site getSite() {
 		return super.getSite().setSleepTime(10000);

@@ -118,24 +118,24 @@ public class SchqUrlUtil {
     	return dataMap;
     }
     
-       //根据品牌信息获取产品型号信息
-  		public static List<HashMap<String,String>> getCpfxCpxqModels(SchqDbcom schqDbcom,HeaderBean schqHeaderBean,String cateId,String brandId,String yesterdayday){
-  			List<HashMap<String, String>> dataList=new ArrayList<HashMap<String,String>>();
-  			HashMap<String,String> dataMap=null;
-  			Map<String, Object> pplbMap=schqDbcom.getSpiderChild("cpfx-cpxq-cplb");
-  			String cpxqPplbUrl=StringUtil.objectVerString(pplbMap.get("geturl"));
-  			String cpxqPplbTargetUrl=cpxqPplbUrl.replaceAll("##D##", yesterdayday).replaceAll("##CID##", cateId).replaceAll("##BID##", brandId);
-  			String cpxqPplbResult=UrlUtil.getUrlString(schqHeaderBean, cpxqPplbTargetUrl);
-  			JSONObject jsonObject=JSON.parseObject(cpxqPplbResult);
-  			JSONArray jsonArray=jsonObject.getJSONObject("content").getJSONArray("data");
-  		    for(int i=0;jsonArray!=null&&i<jsonArray.size();i++){
-  		    	dataMap=new HashMap<String,String>();
-  		    	JSONObject dataObject=jsonArray.getJSONObject(i);
-  		    	dataMap.put("modelId",dataObject.getString("modelId"));
-  		    	dataMap.put("modelName",dataObject.getString("modelName"));
-  		    	dataMap.put("spuId",dataObject.getString("spuId"));
-  		    	dataList.add(dataMap);
-  		    } 
-  			return dataList;
-  		}
+   //根据品牌信息获取产品型号信息
+	public static List<HashMap<String,String>> getCpfxCpxqModels(SchqDbcom schqDbcom,HeaderBean schqHeaderBean,String cateId,String brandId,String yesterdayday){
+		List<HashMap<String, String>> dataList=new ArrayList<HashMap<String,String>>();
+		HashMap<String,String> dataMap=null;
+		Map<String, Object> pplbMap=schqDbcom.getSpiderChild("cpfx-cpxq-cplb");
+		String cpxqPplbUrl=StringUtil.objectVerString(pplbMap.get("geturl"));
+		String cpxqPplbTargetUrl=cpxqPplbUrl.replaceAll("##D##", yesterdayday).replaceAll("##CID##", cateId).replaceAll("##BID##", brandId);
+		String cpxqPplbResult=UrlUtil.getUrlString(schqHeaderBean, cpxqPplbTargetUrl);
+		JSONObject jsonObject=JSON.parseObject(cpxqPplbResult);
+		JSONArray jsonArray=jsonObject.getJSONObject("content").getJSONArray("data");
+	    for(int i=0;jsonArray!=null&&i<jsonArray.size();i++){
+	    	dataMap=new HashMap<String,String>();
+	    	JSONObject dataObject=jsonArray.getJSONObject(i);
+	    	dataMap.put("modelId",dataObject.getString("modelId"));
+	    	dataMap.put("modelName",dataObject.getString("modelName"));
+	    	dataMap.put("spuId",dataObject.getString("spuId"));
+	    	dataList.add(dataMap);
+	    } 
+		return dataList;
+	}
 }

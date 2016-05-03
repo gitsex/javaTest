@@ -8,35 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.base.Util.UrlUtil;
-import com.ecmoho.base.bean.HeaderBean;
-import com.ecmoho.sycm.schq.dao.SchqDbcom;
-
-
 /**
  * @author gusy
  * 市场行情--产品分析——产品详情
  */
 @Component("schqCpfxCpxqExploration")
-public class SchqCpfxCpxqExploration{
-	@Resource(name="schqDbcom")
-    private SchqDbcom schqDbcom;
-	
-	@Resource(name="schqHeaderBean")
-	private  HeaderBean schqHeaderBean;
-	
-	private int days=1;
-	
-	public List<HashMap<String,String>> getCpfxCpxqUrlList(String account,String childAccountArr) {
+public class SchqCpfxCpxqExploration extends SchqExploration{
+
+    @Override	
+	public List<HashMap<String,String>> getUrlList(String account,String childAccountArr, int days) {
 		 List<HashMap<String,String>> urlList=new ArrayList<HashMap<String,String>>();
 		 HashMap<String,String> urlMap=null;
 		 //存储日期

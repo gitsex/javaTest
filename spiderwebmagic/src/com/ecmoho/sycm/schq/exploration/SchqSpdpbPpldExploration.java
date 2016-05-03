@@ -8,31 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
-
 import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.base.bean.HeaderBean;
-import com.ecmoho.sycm.schq.dao.SchqDbcom;
-
 
 /**
  * @author gusy
  * 市场行情——商品店铺榜--品牌粒度
  */
 @Component("schqSpdpbPpldExploration")
-public class SchqSpdpbPpldExploration{
-	@Resource(name="schqDbcom")
-    private SchqDbcom schqDbcom;
-	
-	@Resource(name="schqHeaderBean")
-	private  HeaderBean schqHeaderBean;
-	
-	private int days=1;
+public class SchqSpdpbPpldExploration extends SchqExploration{
 	//获取商品店铺榜_品牌粒度URL集合
-	public List<HashMap<String,String>> getSpdpbPpldUrlList(String account,String childAccountArr) {
+	public List<HashMap<String,String>> getUrlList(String account,String childAccountArr,int days) {
 		 //获取行业目录
 		 List<HashMap<String, String>> hymlList=SchqUrlUtil.getHyml(schqDbcom, schqHeaderBean);
 		 //返回URL集合信息

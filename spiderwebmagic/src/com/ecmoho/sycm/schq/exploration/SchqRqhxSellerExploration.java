@@ -7,31 +7,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
-
 import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.base.bean.HeaderBean;
-import com.ecmoho.sycm.schq.dao.SchqDbcom;
-
-
 /**
  * @author gusy
  * 市场行情——人群画像--卖家人群
  */
 @Component("schqRqhxSellerExploration")
-public class SchqRqhxSellerExploration{
-	@Resource(name="schqDbcom")
-    private SchqDbcom schqDbcom;
-	
-	@Resource(name="schqHeaderBean")
-	private  HeaderBean schqHeaderBean;
-	
-	private int days=1;
+public class SchqRqhxSellerExploration extends SchqExploration{
 	//获取人群画像--卖家人群--链接Url
-	public List<HashMap<String,String>> getRqhxSellerUrlList(String account,String childAccountArr) {
+	@Override
+	public List<HashMap<String,String>> getUrlList(String account,String childAccountArr,int days) {
 		 List<HashMap<String,String>> urlList=new ArrayList<HashMap<String,String>>();
 		 HashMap<String,String> urlMap=null;
 		 //存储日期

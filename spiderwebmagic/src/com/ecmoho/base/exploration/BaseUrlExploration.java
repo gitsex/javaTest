@@ -10,6 +10,6 @@ public interface BaseUrlExploration {
 	 * childAccount 链接子账号
 	 * days 查询天数 
 	 */
-    public List<HashMap<String, String>> getUrlList(String account,String childAccount,int days);
+	public List<HashMap<String,String>> getUrlList(String account,String childAccount,int days);
 
 }

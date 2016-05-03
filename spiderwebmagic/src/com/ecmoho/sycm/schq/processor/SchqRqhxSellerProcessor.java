@@ -9,22 +9,16 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ecmoho.base.Util.StringUtil;
-
-
-
-import com.ecmoho.sycm.schq.exploration.SchqRqhxSellerExploration;
+import com.ecmoho.sycm.schq.exploration.SchqExploration;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 /**
  * 
  * @author gusy
@@ -32,44 +26,23 @@ import us.codecraft.webmagic.Spider;
  */
 @Component("schqRqhxSellerProcessor")
 public class SchqRqhxSellerProcessor extends  SchqProcessor{
-//	@Resource(name="schqDbcom")
-//	private  SchqDbcom schqDbcom;
-//	@Resource(name="schqHeaderBean")
-//	private  HeaderBean schqHeaderBean;
+	
+//	'rqhx-seller-xjfb','rqhx-seller-sffb','rqhx-seller-mjfb'
+	
+	@Resource(name="schqRqhxSellerProcessor")
+	private SchqProcessor schqProcessor;
 	@Resource(name="schqRqhxSellerExploration")
-	private SchqRqhxSellerExploration schqRqhxSellerExploration;
-//	@Resource(name="schqRqhxBuyerProcessor")
-//    private SchqRqhxBuyerProcessor schqRqhxBuyerProcessor;
-	public  void start(SchqRqhxSellerProcessor schqRqhxSellerProcessor){
-		
-		
-		 //获取店铺列表
-		 List<Map<String, Object>> taskList=schqDbcom.getSpidersTaskList("sycm");
-		 for(int i=0;taskList!=null&&i<taskList.size();i++){
-			 Map<String, Object> taskMap=taskList.get(i);
-			 String id=StringUtil.objectVerString(taskMap.get("id"));
-			 if(id.equals("11")){
-				 String account=StringUtil.objectVerString(taskMap.get("account"));
-				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
-				 schqHeaderBean.setCookie(refer_cookie);
-				 //星级分布，省份分布，卖家分布
-				 
-				 //'rqhx-seller-xjfb','rqhx-seller-sffb','rqhx-seller-mjfb'
-				 List<HashMap<String,String>> urlHyzbList=schqRqhxSellerExploration.getRqhxSellerUrlList(account,"'rqhx-seller-xjfb'");
-				 System.out.println(urlHyzbList.size());
-			     for(int j=0;j<urlHyzbList.size();j++){
-			    	 Map<String,String> map=urlHyzbList.get(j);
-			    	 schqHeaderBean.setUrlMap(map);
-//			    	 System.out.println(map.get("targetUrl"));
-			    	 Spider.create(schqRqhxSellerProcessor).addUrl(map.get("targetUrl")).run();
-			     }
-			 }
-		 }
-	}
-	public static void main(String[] args) {
-		ApplicationContext ac =new ClassPathXmlApplicationContext("conf/applicationContext.xml");
-		SchqRqhxSellerProcessor schqRqhxSellerProcessor=(SchqRqhxSellerProcessor) ac.getBean("schqRqhxSellerProcessor");
-		schqRqhxSellerProcessor.start(schqRqhxSellerProcessor);
+	private SchqExploration schqExploration;
+	@Value("9,11,12,13,23,26")
+	private String accountIdArr;
+    //'rqhx-seller-xjfb','rqhx-seller-sffb','rqhx-seller-mjfb'
+	@Value("rqhx-seller-xjfb,rqhx-seller-sffb,rqhx-seller-mjfb")
+	private String childAccountArr;
+	@Value("1")
+	private int days;
+    
+	public void run() {
+		super.start(schqProcessor, schqExploration,accountIdArr, childAccountArr, days);
 	}
 	@Override
 	public Site getSite() {

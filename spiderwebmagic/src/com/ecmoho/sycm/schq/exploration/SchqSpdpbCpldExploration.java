@@ -8,35 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.ecmoho.base.Util.StringUtil;
-import com.ecmoho.base.Util.UrlUtil;
-import com.ecmoho.base.bean.HeaderBean;
-import com.ecmoho.sycm.schq.dao.SchqDbcom;
-
 
 /**
  * @author gusy
  * 市场行情——商品店铺榜--产品粒度
  */
 @Component("schqSpdpbCpldExploration")
-public class SchqSpdpbCpldExploration{
-	@Resource(name="schqDbcom")
-    private SchqDbcom schqDbcom;
+public class SchqSpdpbCpldExploration extends SchqExploration{
 	
-	@Resource(name="schqHeaderBean")
-	private  HeaderBean schqHeaderBean;
-	
-	private int days=1;
 	//获取商品店铺榜_产品粒度URL集合
-	public List<HashMap<String,String>> getSpdpbCpldUrlList(String account,String childAccountArr) {
+	@Override
+	public List<HashMap<String,String>> getUrlList(String account,String childAccountArr,int days) {
 		 List<HashMap<String,String>> urlList=new ArrayList<HashMap<String,String>>();
 		 HashMap<String,String> urlMap=null;
 		 //存储日期

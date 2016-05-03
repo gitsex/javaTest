@@ -37,9 +37,10 @@ public class SchqDbcom{
   			return schqSpiderJdbcTemplate.queryForMap("select * from spider_account_schq_child where child_account = '"+account+"' LIMIT 1");
   	  }
       //获取多条URL具体信息
-      public  List<Map<String, Object>>  getSpiderChildList(String accountArr) {
-//    	  System.out.println("select * from spider_account_schq_child where child_account in ("+accountArr+") LIMIT 1");
-  		   return schqSpiderJdbcTemplate.queryForList("select * from spider_account_schq_child where child_account in ("+accountArr+")");
+      public  List<Map<String, Object>>  getSpiderChildList(String childAccountArr) {
+    	   //"cpfx-cpxq-cpgk,cpfx-cpxq-zfjg,cpfx-cpxq-zyfb,cpfx-cpxq-nlfb"
+    	   String childAccountStr="'"+childAccountArr.replaceAll(",", "','")+"'";
+  		   return schqSpiderJdbcTemplate.queryForList("select * from spider_account_schq_child where child_account in ("+childAccountStr+")");
   	  }
       //插入单条数据
       public void add(Map<String,String> dataMap,String tableName){

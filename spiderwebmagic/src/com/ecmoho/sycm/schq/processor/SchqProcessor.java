@@ -1,14 +1,22 @@
 package com.ecmoho.sycm.schq.processor;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.ecmoho.base.Util.StringUtil;
 import com.ecmoho.base.bean.HeaderBean;
 import com.ecmoho.sycm.schq.dao.SchqDbcom;
+import com.ecmoho.sycm.schq.exploration.SchqExploration;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 @Component("schqProcessor")
 public class SchqProcessor implements PageProcessor{
@@ -18,6 +26,36 @@ public class SchqProcessor implements PageProcessor{
 	protected  HeaderBean schqHeaderBean;
 	
 	private Site site=Site.me().setTimeOut(3000).setRetryTimes(3).setSleepTime(2000);
+	/*
+	 * SchqProcessor schqProcessor本身类实例，创建抓取动作
+	 * SchqExploration schqExploration探查URL类
+	 * String accountArr待抓取店铺集合
+	 * String childAccountArr待抓取子URL集合
+	 * int days一次抓取天数
+	 */
+	public  void start(SchqProcessor schqProcessor,SchqExploration schqExploration,String accountIdArr,String childAccountArr,int days){
+		 
+		 //获取店铺列表
+		 List<Map<String, Object>> taskList=schqDbcom.getSpidersTaskList("sycm");
+		 
+		
+		 for(int i=0;taskList!=null&&i<taskList.size();i++){
+			 Map<String, Object> taskMap=taskList.get(i);
+			 String id=StringUtil.objectVerString(taskMap.get("id"));
+			 if(Arrays.asList(accountIdArr.split(",")).contains(id)){
+				 String account=StringUtil.objectVerString(taskMap.get("account"));
+				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
+				 schqHeaderBean.setCookie(refer_cookie);
+				 List<HashMap<String,String>> urlHyzbList=schqExploration.getUrlList(account,childAccountArr,days);
+				 System.out.println(urlHyzbList.size());
+			     for(int j=0;j<urlHyzbList.size();j++){
+			    	 Map<String,String> map=urlHyzbList.get(j);
+			    	 schqHeaderBean.setUrlMap(map);
+			    	 Spider.create(schqProcessor).addUrl(map.get("targetUrl")).run();
+			     }
+			 }
+		 }
+	}
 	@Override
 	public Site getSite() {
 //		System.out.println(schqHeaderBean.getCookie());
