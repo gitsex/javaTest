@@ -39,7 +39,7 @@ public class OrderClient {
 	
 	public static void main(String[] args) {
 		try {
-			System.out.println(doSend("T2700P1824248321556802", "view"));
+			System.out.println(doSend("1879804667015935", "view"));
 	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -137,7 +137,7 @@ public class OrderClient {
 			   Map<String, String> item = Order.get(0);  
 			   
 			   List<Map<String, String>> ordergoods =DBsql.getOrderGoodsList("where orderNumber='"+item.get("orderNumber")+"'");
-			   DecimalFormat df = new DecimalFormat("#.00");
+			   DecimalFormat df = new DecimalFormat("0.00");
 		        //计算商品小计总和 平摊金额
 		        Double  totalgoodsprice=0.00;
 		        Double  totalgoodspricereal=0.00;
@@ -368,7 +368,18 @@ public class OrderClient {
 				
 				orderXmlSb.append("<OrderPaymentLogistics>\n");
 				orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
-				orderXmlSb.append("<paymentName>"+("P0001".equalsIgnoreCase(item.get("pay_account"))?"支付宝（中国）网络技术有限公司":"")+"</paymentName>\n");
+				switch (item.get("pay_account")) {
+					case "P0001":
+						orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
+						break;
+					case "P0015":
+						orderXmlSb.append("<paymentName>财付通支付科技有限公司</paymentName>\n");
+						break;
+					default:
+						orderXmlSb.append("<paymentName></paymentName>\n");
+						break;
+				}
+
 				orderXmlSb.append("<paymentType></paymentType>\n");
 				orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
 				

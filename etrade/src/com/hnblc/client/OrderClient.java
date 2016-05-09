@@ -143,7 +143,7 @@ public class OrderClient {
 			   
 			   List<Map<String, String>> ordergoods =DBsql.getOrderGoodsList("where orderNumber='"+item.get("orderNumber")+"'");
 			   System.out.println("ordergoods.size():"+ordergoods.size());
-			   DecimalFormat df = new DecimalFormat("#.00");
+			   DecimalFormat df = new DecimalFormat("0.00");
 		        //计算商品小计总和 平摊金额
 		        Double  totalgoodsprice=0.00;
 		        Double  totalgoodspricereal=0.00;
@@ -206,7 +206,7 @@ public class OrderClient {
 			    
 			    orderXmlSb.append("<orderNo>"+item.get("orderNumber")+"</orderNo>\n");
 			   //货值+运费+其它费用+进口行邮税=总费用，必填
-				orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
+			    orderXmlSb.append("<charge>"+df.format(charge)+"</charge>\n");
 				orderXmlSb.append("<goodsValue>"+df.format(totalgoodvaluesreal)+"</goodsValue>\n");
 				orderXmlSb.append("<freight></freight>\n");//"+df.format(Double.valueOf(item.get("deliveryCost")))+"
 				orderXmlSb.append("<other>"+(totalamount==0.00?"":df.format(totalamount))+"</other>\n");
@@ -300,11 +300,11 @@ public class OrderClient {
 						 Error.put("orderNumber", item.get("orderNumber"));
 						 try {
 							DBsql.addError(Error);
-						} catch (UnsupportedEncodingException e1) {
+						 }catch (UnsupportedEncodingException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 							
-						}
+						 }
 						
 						   return "";
 					}
@@ -373,7 +373,18 @@ public class OrderClient {
 				orderXmlSb.append("<OrderPaymentLogistics>\n");
 
 				orderXmlSb.append("<paymentCode>"+item.get("pay_account")+"</paymentCode>\n");//P0001支付宝
-				orderXmlSb.append("<paymentName>"+("P0001".equalsIgnoreCase(item.get("pay_account"))?"支付宝（中国）网络技术有限公司":"")+"</paymentName>\n");
+				switch (item.get("pay_account")) {
+					case "P0001":
+						orderXmlSb.append("<paymentName>支付宝（中国）网络技术有限公司</paymentName>\n");
+						break;
+					case "P0015":
+						orderXmlSb.append("<paymentName>财付通支付科技有限公司</paymentName>\n");
+						break;
+					default:
+						orderXmlSb.append("<paymentName></paymentName>\n");
+						break;
+			    }
+//				orderXmlSb.append("<paymentName>"+("P0001".equalsIgnoreCase(item.get("pay_account"))?"支付宝（中国）网络技术有限公司":"")+"</paymentName>\n");
 				orderXmlSb.append("<paymentType></paymentType>\n");
 				orderXmlSb.append("<paymentNo>"+item.get("pay_id")+"</paymentNo>\n");
 				
