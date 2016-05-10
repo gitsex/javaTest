@@ -13,6 +13,7 @@ import com.ecmoho.base.Util.StringUtil;
 import com.ecmoho.base.bean.HeaderBean;
 import com.ecmoho.sycm.schq.dao.SchqDbcom;
 import com.ecmoho.sycm.schq.exploration.SchqExploration;
+import com.ecmoho.sycm.schq.selenium.SchqSeleniumSpider;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -24,7 +25,8 @@ public class SchqProcessor implements PageProcessor{
 	protected  SchqDbcom schqDbcom;
 	@Resource(name="schqHeaderBean")
 	protected  HeaderBean schqHeaderBean;
-	
+	@Resource(name="schqSeleniumSpider")
+	private SchqSeleniumSpider schqSeleniumSpider;
 	private Site site=Site.me().setTimeOut(3000).setRetryTimes(3).setSleepTime(2000);
 	/*
 	 * SchqProcessor schqProcessor本身类实例，创建抓取动作
@@ -38,12 +40,14 @@ public class SchqProcessor implements PageProcessor{
 		 //获取店铺列表
 		 List<Map<String, Object>> taskList=schqDbcom.getSpidersTaskList("sycm");
 		 
-		
+		 
 		 for(int i=0;taskList!=null&&i<taskList.size();i++){
+			 
 			 Map<String, Object> taskMap=taskList.get(i);
 			 String id=StringUtil.objectVerString(taskMap.get("id"));
 			 if(Arrays.asList(accountIdArr.split(",")).contains(id)){
 				 String account=StringUtil.objectVerString(taskMap.get("account"));
+//				 String refer_cookie=schqSeleniumSpider.getCookie(taskMap);
 				 String refer_cookie=StringUtil.objectVerString(taskMap.get("reffer_cookie"));
 				 schqHeaderBean.setCookie(refer_cookie);
 				 List<HashMap<String,String>> urlHyzbList=schqExploration.getUrlList(account,childAccountArr,days);
@@ -73,7 +77,7 @@ public class SchqProcessor implements PageProcessor{
 			site.addHeader("origin", schqHeaderBean.getOrgin());
 		}
 		if(!"".equals(schqHeaderBean.getReferer())&&schqHeaderBean.getReferer()!=null){
-			site.addHeader("referer", "https://mq.sycm.taobao.com/industry/overview/overview.htm?_res_id_=199");
+			site.addHeader("referer", schqHeaderBean.getReferer());
 		}
 		if(!"".equals(schqHeaderBean.getCookie())&&schqHeaderBean.getCookie()!=null){
 			site.addHeader("cookie", schqHeaderBean.getCookie());

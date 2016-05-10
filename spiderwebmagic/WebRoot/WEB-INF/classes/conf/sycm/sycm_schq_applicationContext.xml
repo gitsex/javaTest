@@ -58,8 +58,8 @@
         <property name="accept" value="*/*"></property>
    </bean>  
    <task:scheduled-tasks>   
-        <task:scheduled ref="schqHyzbProcessor" method="run" cron="* 0/2 * * * ?"/> 
-        <task:scheduled ref="schqHydpProcessor" method="run" cron="* 0/2 * * * ?"/> 
+        <task:scheduled ref="schqHyzbProcessor" method="run" cron="* 0/10 * * * ?"/> 
+        <task:scheduled ref="schqHydpProcessor" method="run" cron="* 0/10 * * * ?"/> 
    </task:scheduled-tasks>   
   
 </beans>

@@ -1,0 +1,94 @@
+package com.ecmoho.base.selenium;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+
+
+
+
+
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import com.ecmoho.base.Util.StringUtil;
+
+//系统登录模型
+public abstract class SeleniumSpider {
+	public final WebDriver getWebDriver(){
+		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+	    //System.setProperty("javax.xml.parsers.DocumentBuilderFactory","com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
+		WebDriver webDriver= new ChromeDriver();
+		webDriver.manage().window().maximize();
+		webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		return webDriver;
+	}
+	//页面登录逻辑
+    //子类具体实现
+	public abstract void loginPage(WebDriver webDriver,Map<String, Object> spider);
+	
+	public final String getCookie(Map<String, Object> spider){
+		WebDriver webDriver=getWebDriver();
+		String cookie=login(webDriver, spider);
+		return cookie;
+	}
+	//获取cookie逻辑
+	public final String login(WebDriver webDriver,Map<String, Object> spider){
+		String login_url=StringUtil.objectVerString(spider.get("login_url"));
+		String red_url=StringUtil.objectVerString(spider.get("red_url"));
+		  //传入账号模拟登录
+		  String cookieStr = "";
+	        //尝试次数
+	        int times=2;
+	        int i=1;
+	        try {
+	        	 //尝试登录
+		        loginPage(webDriver,spider);
+		        //不停的检测，一旦当前页面URL不是登录页面URL，就说明浏览器已经进行了跳转
+	            while (i<times) {
+	                Thread.sleep(500L);
+	                if (!webDriver.getCurrentUrl().startsWith(login_url)) {
+	                	  webDriver.get(red_url);
+	           	       try {
+	           			   Thread.sleep(500L);
+	           		    } catch (InterruptedException e) {
+	           			   e.printStackTrace();
+	           		    }
+	           	        webDriver.get(red_url);
+	           	     try {
+	           			   Thread.sleep(500L);
+	           		    } catch (InterruptedException e) {
+	           			   e.printStackTrace();
+	           		    }
+	           		  //获取cookie，上面一跳出循环我认为就登录成功了，当然上面的判断不太严格，可以再进行修改
+	           	        Set<Cookie> cookies = webDriver.manage().getCookies();
+	           	      
+	           	        for (Cookie cookie : cookies) {
+	           	            cookieStr += cookie.getName() + "=" + cookie.getValue() + "; ";
+	           	        }
+//	           	     SchqDbcom.updateSpiderZxfxFlag(account, "1");
+	           	        break;
+	                }
+	                else{
+	                	 //尝试登录
+	                	if(i<=times){
+//	                		SchqDbcom.updateSpiderZxfxFlag(account, "0");
+	                		i++;
+	                		loginPage(webDriver,spider);
+	                	}else{
+	                		break;
+	                	}
+	                }
+	            }
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	            return "";
+	        }
+		    //退出，关闭浏览器
+	        webDriver.quit();
+	        return cookieStr;
+	}
+	
+}
