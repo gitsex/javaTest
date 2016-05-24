@@ -375,6 +375,9 @@ public class OrderClient {
 					case "P0015":
 						orderXmlSb.append("<paymentName>财付通支付科技有限公司</paymentName>\n");
 						break;
+					case "P0023":
+						orderXmlSb.append("<paymentName>北京银联商务有限公司</paymentName>\n");
+						break;
 					default:
 						orderXmlSb.append("<paymentName></paymentName>\n");
 						break;

@@ -67,7 +67,7 @@ public class ProcessStatus {
 		  	String updateorderstatustime = sdf2.format(nowtimestamp*1000);
 		  	
 		  	//获取总数量
-		  	
+		  	//batchNumber='YD20160510010' AND
 			String  where =" Ismatch=1 AND logisticsExchangeStatus=1 AND customsTransStatus=1 AND EtradeOutStatus <>'已结关' AND EtradeStatusTime< '"+EtradeStatusTime+"'";
 			int count  =DBsql.getTotalNeedEtradeStatusOrder(where);
 			
@@ -77,7 +77,7 @@ public class ProcessStatus {
 			for(int i=0;i<=count;i++)
 			{
 				
-			
+			//batchNumber='YD20160510010' AND
 			 where =" Ismatch=1 AND logisticsExchangeStatus=1 AND customsTransStatus=1 AND EtradeOutStatus <>'已结关' AND EtradeStatusTime< '"+EtradeStatusTime+"' ORDER BY `EtradeStatusTime` DESC  limit "+i*1000+",1000";
 			
 		  	 OrderStatus.getOrderStatus(where,updateorderstatustime,nowtime);
