@@ -27,7 +27,7 @@ public class SchqHydpExploration extends SchqExploration{
 		 String nowDateStr=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		 Map<String, Object> taskMap=schqDbcom.getSpider(account);
 		 String accountid=StringUtil.objectVerString(taskMap.get("id"));
-		 List<HashMap<String, String>> hymlList=SchqUrlUtil.getHyml(schqDbcom, schqHeaderBean).subList(0, 1);
+		 List<HashMap<String, String>> hymlList=getHyml(schqDbcom, schqHeaderBean).subList(0, 1);
 		 
     	 for (int d = 1; d <=Integer.valueOf(days) ; d++) {
 		    Calendar   cal   =   Calendar.getInstance();

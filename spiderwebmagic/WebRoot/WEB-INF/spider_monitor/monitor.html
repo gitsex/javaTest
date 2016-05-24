@@ -1,104 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>MyHtml.html</title>
+<title>ç›‘æ§ç•Œé¢</title>
 
 <meta name="keywords" content="keyword1,keyword2,keyword3">
 <meta name="description" content="this is my page">
-<meta name="content-type" content="text/html; charset=gb2312">
+<meta name="content-type" content="text/html; charset=utf-8">
 
-<link rel="stylesheet" href="easydialog.css" />
-<script src="easydialog.min.js"></script>
-<script type="text/javascript">
-	function openDialog() {
-		var btnFn = function() {
-			alert(e.target);
-			return false;
-		};
-		easyDialog
-				.open({
-					container : {
-						content : '<table border="1" width="100%" cellpadding="0" cellspacing="1"><tr><th>Î´Íê³ÉURL</th><th>Ô­Òò</th></tr><tr nowrap><td>http://taobao.com</td><td align=center>Ê§°Ü</td></tr><tr nowrap><td>http://jingdong.com</td><td align=center>ÎŞĞ§Êı¾İ</td></tr><tr nowrap><td>http://taobao.com</td><td align=center>Ê§°Ü</td></tr><tr nowrap><td>http://taobao.com</td><td align=center>Ê§°Ü</td></tr><tr nowrap><td>http://taobao.com</td><td align=center>Ê§°Ü</td></tr></table>',
-						noFn : true,
-						noText : '¹Ø±Õ'
-					}
-				});
-	}
-</script>
+<link rel="stylesheet"  href="../public/css/bootstrap.min.css" />
+<link rel="stylesheet"  href="../public/css/monitor.css">
+<script type="text/javascript" src="../public/js/jquery.min.js"></script>
+<script type="text/javascript" src="../public/js/bootstrap.js"></script>
+<script type="text/javascript" src="../public/js/monitor.js"></script>
+
 <body>
-	<table border="1" width="100%" cellpadding="0" cellspacing="1"
-		bgcolor="#ACDDEC">
-		<tr align=center nowrap>
-			<th>ID</th>
-			<th>×÷Òµ´óÀà</th>
-			<th>ÈÎÎñÃèÊö</th>
-			<th>Æô¶¯Ê±¼ä</th>
-			<th>Ö´ĞĞÖÜÆÚ</th>
-			<th>·¢ÏÖÊı¾İÊıÁ¿</th>
-			<th>Íê³ÉÇé¿ö£¨Ê§°Ü/ÎŞĞ§Êı¾İ/Íê³É£©</th>
-			<th>°´Å¥</th>
+<h1>ç›‘æ§ç•Œé¢ <small>ä»»åŠ¡åˆ—è¡¨</small></h1>
+<div class="table-responsive">
+	<table id="mainTable" class="table table-hover table-striped table-bordered">
+		<thead>
+		<tr>
+			<th>åºå·</th>
+			<th>åº—é“ºåç§°</th>
+			<th>ä»»åŠ¡æè¿°</th>
+			<th>å¯åŠ¨æ—¶é—´</th>
+			<th>æ‰§è¡Œå‘¨æœŸ</th>
+			<th>å‘ç°æ•°æ®æ•°é‡</th>
+			<th>å®Œæˆæƒ…å†µï¼ˆå®Œæˆ/å¤±è´¥ï¼‰</th>
+			<th class="tdcenter">æ‰§è¡ŒçŠ¶æ€</th>
+			<th class="tdcenter">æ“ä½œ</th>
 		</tr>
-		<tr align=center nowrap>
+		</thead>
+		<tbody>
+		<tr hidden="hidden" data-key="">
 			<td>1</td>
-			<td>À×ÔÊÉÏ</td>
-			<td>²éÕÒÀ×ÔÊÉÏËùÓĞµ°°×·Û²úÆ·</td>
+			<td>é›·å…ä¸Š</td>
+			<td>æŸ¥æ‰¾é›·å…ä¸Šæ‰€æœ‰è›‹ç™½ç²‰äº§å“</td>
 			<td>2016/05/10 13:00</td>
 			<td>5min</td>
 			<td>19830</td>
-			<td><a href="#" onclick="openDialog()">320/52/19458</a></td>
-			<td><button>ÖØÊÔ</button>&nbsp;
-				<button>ºöÂÔ</button>&nbsp;
-				<button>½áÊø</button></td>
+			<td onmouseover="this.style.cursor='pointer'" onclick="showModel(this)">
+				<div class="progress"  data-toggle="modal" data-target="#myModal">
+				   <div class="progress-bar " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" 	style="width: 10%;">
+				      <span>830</span>
+				   </div>
+				  <div style="text-align: center">19000</div>
+			    </div>
+			</td>
+			<td  class="tdcenter">æ‰§è¡Œå®Œæˆ</td>
+			<td class="tdcenter">
+			    <button type="button"  class="btn btn-sm btn-primary" onclick="retry(this)">é‡è¯•</button>&nbsp;&nbsp;&nbsp;
+				<button type="button"  class="btn btn-sm btn-danger" onclick="ignore(this)">å¿½ç•¥</button>
+				<!-- <button type="button"  class="btn btn-sm btn-warning " >ç»“æŸ</button> -->
+			</td>
 		</tr>
-
-		<tr align=center nowrap>
-			<td>2</td>
-			<td>°²Àû</td>
-			<td>²éÕÒ°²ÀûËùÓĞÖ²Îï¾«»ª²úÆ·</td>
-			<td>2016/05/10 13:20</td>
-			<td>5min</td>
-			<td>9830</td>
-			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
-			<td><button>ÖØÊÔ</button>&nbsp;
-				<button>ºöÂÔ</button>&nbsp;
-				<button>½áÊø</button></td>
-		</tr>
-		<tr align=center nowrap>
-			<td>3</td>
-			<td>ÄªË¹Àû°²</td>
-			<td>²éÕÒÄªË¹Àû°²¶«±±ÏúÁ¿</td>
-			<td>2016/05/10 13:20</td>
-			<td>5min</td>
-			<td>9830</td>
-			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
-			<td><button>ÖØÊÔ</button>&nbsp;
-				<button>ºöÂÔ</button>&nbsp;
-				<button>½áÊø</button></td>
-		</tr>
-		<tr align=center nowrap>
-			<td>4</td>
-			<td>ºÃÊ±</td>
-			<td>²éÕÒºÃÊ±ÌÔ±¦µÄÏúÊÛÁ¿</td>
-			<td>2016/05/10 13:20</td>
-			<td>5min</td>
-			<td>9830</td>
-			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
-			<td><button>ÖØÊÔ</button>&nbsp;
-				<button>ºöÂÔ</button>&nbsp;
-				<button>½áÊø</button></td>
-		</tr>
-		<tr align=center nowrap>
-			<td>5</td>
-			<td>¹şÒ©</td>
-			<td>²éÕÒ¹şÒ©Áù³§Ò©Æ·ÉÏº£ÏúÊÛÁ¿</td>
-			<td>2016/05/10 13:20</td>
-			<td>5min</td>
-			<td>9830</td>
-			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
-			<td><button>ÖØÊÔ</button>&nbsp;
-				<button>ºöÂÔ</button>&nbsp;
-				<button>½áÊø</button></td>
-		</tr>
+		</tbody>
 	</table>
+   </div>
+   
+	   <!-- æ¨¡æ€æ¡†ï¼ˆModalï¼‰ -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	   <div class="modal-dialog">
+	      <div class="modal-content">
+	         <div class="modal-header">
+	            <button type="button" class="close" 
+	               data-dismiss="modal" aria-hidden="true">
+	                  &times;
+	            </button>
+	            <h3 class="modal-title" id="myModalLabel">
+	             urlåˆ—è¡¨è¯¦ç»†
+	            </h3>
+	         </div>
+	         <div class="modal-body">
+	           <div class="table-responsive">
+	            <table class="table">
+				   
+				   <thead>
+				      <tr>
+				         <th>urlåˆ—è¡¨</th>
+				         <th>çŠ¶æ€</th>
+				      </tr>
+				   </thead>
+				   <tbody>
+				     
+				   </tbody>
+				</table>
+	         </div>
+	         </div>
+	         <div class="modal-footer">
+	            <button type="button" class="btn btn-default" 
+	               data-dismiss="modal">å…³é—­
+	            </button>
+	         </div>
+	      </div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+	</div>
+   
 </body>
 </html>

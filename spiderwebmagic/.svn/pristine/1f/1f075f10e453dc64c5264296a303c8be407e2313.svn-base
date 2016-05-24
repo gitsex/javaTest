@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -14,9 +17,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.ecmoho.base.Util.StringUtil;
 import com.ecmoho.base.Util.UrlUtil;
 import com.ecmoho.base.bean.HeaderBean;
+import com.ecmoho.base.exploration.BaseUrlExploration;
 import com.ecmoho.sycm.schq.dao.SchqDbcom;
 
-public class SchqUrlUtil {
+@Component("schqExploration")
+public class SchqExploration implements BaseUrlExploration{
+	@Resource(name="schqDbcom")
+    protected SchqDbcom schqDbcom;
+	@Resource(name="schqHeaderBean")
+	protected  HeaderBean schqHeaderBean;
+	
+	public List<HashMap<String,String>> getUrlList(String account,String childAccount,int days){
+		return null;
+	};
 	//获取行业目录
     public static List<HashMap<String, String>> getHyml(SchqDbcom schqDbcom,HeaderBean schqHeaderBean){
 		
@@ -27,7 +40,7 @@ public class SchqUrlUtil {
 		 String edition=pageHtmlDoc.select("[name=marketVersion]").attr("content");
 		 String hymlStr=hymlUrlArr[1].replaceAll("##ED##", edition);
 		 String hymlResult=UrlUtil.getUrlString(schqHeaderBean,hymlStr);
-    	
+    	System.out.println("hymlResult:"+hymlResult);
  	    List<HashMap<String, String>> hymlList=new ArrayList<HashMap<String,String>>();
 		JSONObject hymlJsonObject=JSON.parseObject(hymlResult);
 		JSONArray dataJsonArray=hymlJsonObject.getJSONObject("content").getJSONArray("data");

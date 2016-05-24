@@ -22,7 +22,7 @@
     </bean>  
     <!--配置redis连接，默认选择db0  -->
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:host-name="192.168.1.245" p:port="6379" p:password="123456" p:database="0"   p:pool-config-ref="poolConfig"  />
+          p:host-name="192.168.1.244" p:port="6379" p:password="" p:database="0"   p:pool-config-ref="poolConfig"  />
     <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate" >  
         <property name="connectionFactory"   ref="connectionFactory" />  
     </bean>

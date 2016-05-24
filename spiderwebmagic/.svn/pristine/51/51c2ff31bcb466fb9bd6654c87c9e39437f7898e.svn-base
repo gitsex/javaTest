@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MyHtml.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../public/css/easydialog.css" />
+<script src="../public/js/easydialog.min.js"></script>
+<script type="text/javascript">
+	function openDialog() {
+		var btnFn = function() {
+			alert(e.target);
+			return false;
+		};
+		easyDialog
+				.open({
+					container : {
+						content : '<table border="1" width="100%" cellpadding="0" cellspacing="1"><tr><th>未完成URL</th><th>原因</th></tr><tr nowrap><td>http://taobao.com</td><td align=center>失败</td></tr><tr nowrap><td>http://jingdong.com</td><td align=center>无效数据</td></tr><tr nowrap><td>http://taobao.com</td><td align=center>失败</td></tr><tr nowrap><td>http://taobao.com</td><td align=center>失败</td></tr><tr nowrap><td>http://taobao.com</td><td align=center>失败</td></tr></table>',
+						noFn : true,
+						noText : '关闭'
+					}
+				});
+	}
+</script>
+<body>
+	<table border="1" width="100%" cellpadding="0" cellspacing="1"
+		bgcolor="#ACDDEC">
+		<tr align=center nowrap>
+			<th>ID</th>
+			<th>作业大类</th>
+			<th>任务描述</th>
+			<th>启动时间</th>
+			<th>执行周期</th>
+			<th>发现数据数量</th>
+			<th>完成情况（失败/无效数据/完成）</th>
+			<th>按钮</th>
+		</tr>
+		<tr align=center nowrap>
+			<td>1</td>
+			<td>雷允上</td>
+			<td>查找雷允上所有蛋白粉产品</td>
+			<td>2016/05/10 13:00</td>
+			<td>5min</td>
+			<td>19830</td>
+			<td><a href="#" onclick="openDialog()">320/52/19458</a></td>
+			<td><button>重试</button>&nbsp;
+				<button>忽略</button>&nbsp;
+				<button>结束</button></td>
+		</tr>
+
+		<tr align=center nowrap>
+			<td>2</td>
+			<td>安利</td>
+			<td>查找安利所有植物精华产品</td>
+			<td>2016/05/10 13:20</td>
+			<td>5min</td>
+			<td>9830</td>
+			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
+			<td><button>重试</button>&nbsp;
+				<button>忽略</button>&nbsp;
+				<button>结束</button></td>
+		</tr>
+		<tr align=center nowrap>
+			<td>3</td>
+			<td>莫斯利安</td>
+			<td>查找莫斯利安东北销量</td>
+			<td>2016/05/10 13:20</td>
+			<td>5min</td>
+			<td>9830</td>
+			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
+			<td><button>重试</button>&nbsp;
+				<button>忽略</button>&nbsp;
+				<button>结束</button></td>
+		</tr>
+		<tr align=center nowrap>
+			<td>4</td>
+			<td>好时</td>
+			<td>查找好时淘宝的销售量</td>
+			<td>2016/05/10 13:20</td>
+			<td>5min</td>
+			<td>9830</td>
+			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
+			<td><button>重试</button>&nbsp;
+				<button>忽略</button>&nbsp;
+				<button>结束</button></td>
+		</tr>
+		<tr align=center nowrap>
+			<td>5</td>
+			<td>哈药</td>
+			<td>查找哈药六厂药品上海销售量</td>
+			<td>2016/05/10 13:20</td>
+			<td>5min</td>
+			<td>9830</td>
+			<td><a href="#" onclick="openDialog()">320/52/9458</a></td>
+			<td><button>重试</button>&nbsp;
+				<button>忽略</button>&nbsp;
+				<button>结束</button></td>
+		</tr>
+	</table>
+</body>
+</html>

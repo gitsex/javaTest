@@ -15,9 +15,9 @@
 	 <!-- 爬虫账户数据库信息 -->
      <bean id="schqSpiderSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>
-		<property name="url"><value>jdbc:mysql://192.168.2.246:3306/spider</value></property>
-		<property name="username"><value>root</value></property>
-		<property name="password"><value>root</value></property>
+		<property name="url"><value>jdbc:mysql://192.168.1.244:3310/spider?useUnicode=true&amp;characterEncoding=UTF-8</value></property>
+		<property name="username"><value>SpiderDBA</value></property>
+		<property name="password"><value>1234</value></property>
 	    <property name="maxActive"><value>4</value></property>
 		<property name="maxIdle"><value>2</value></property>
 		<property name="maxWait"><value>5000</value></property>
@@ -34,9 +34,9 @@
      <!-- 数据存入数据库信息 -->
     <bean id="schqDataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>
-		<property name="url"><value>jdbc:mysql://192.168.2.246:3306/ecmoho_schq</value></property>
-		<property name="username"><value>root</value></property>
-		<property name="password"><value>root</value></property>
+		<property name="url"><value>jdbc:mysql://192.168.1.244:3310/ecmoho_schq?useUnicode=true&amp;characterEncoding=UTF-8</value></property>
+		<property name="username"><value>SpiderDBA</value></property>
+		<property name="password"><value>1234</value></property>
 	    <property name="maxActive"><value>4</value></property>
 		<property name="maxIdle"><value>2</value></property>
 		<property name="maxWait"><value>5000</value></property>
@@ -57,9 +57,9 @@
         <property name="acceptLanguage" value="zh-CN,zh;q=0.8"></property>
         <property name="accept" value="*/*"></property>
    </bean>  
-   <!-- <task:scheduled-tasks>   
-        <task:scheduled ref="schqHyzbProcessor" method="run" cron="* 0/10 * * * ?"/> 
-        <task:scheduled ref="schqHydpProcessor" method="run" cron="* 0/10 * * * ?"/> 
-   </task:scheduled-tasks>    -->
+   <task:scheduled-tasks>   
+         <!-- <task:scheduled ref="schqHyzbProcessor" method="run" cron="* 0/15 * * * ?"/>  -->
+        <task:scheduled ref="schqHydpProcessor" method="run" cron="* 0/15 * * * ?"/>
+   </task:scheduled-tasks>  
   
 </beans>

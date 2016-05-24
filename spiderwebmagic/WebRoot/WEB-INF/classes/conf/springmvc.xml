@@ -25,5 +25,5 @@
                 <value>text/plain;charset=UTF-8</value>  
             </list>  
         </property> 
-    </bean>   
+    </bean> 
 </beans>

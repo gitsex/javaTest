@@ -22,13 +22,17 @@ public class SchqDbcom{
 	  
       //获取待爬取店铺列表
       public List<Map<String, Object>>  getSpidersTaskList(String accountLike) {
-	  	   return schqSpiderJdbcTemplate.queryForList("select * from spider_account_schq   order by id asc");
+	  	   return schqSpiderJdbcTemplate.queryForList("select * from spider_account_schq where account like '%"+accountLike+"%'  order by id asc");
 	  }
       //获取全部爬取URL任务列表
       public  List<Map<String, Object>>  getChildSpiders() {
   		  return schqSpiderJdbcTemplate.queryForList("select * from spider_account_schq_child ");
   	  }
-      //获取单个店铺具体信息
+     //由账户ID获取单个店铺具体信息
+      public Map<String, Object>  getSpiderById(int id) {
+  			return schqSpiderJdbcTemplate.queryForMap("select * from spider_account_schq where id = "+id+" LIMIT 1");
+  	  }
+      //由账户简称获取单个店铺具体信息
       public Map<String, Object>  getSpider(String account) {
   			return schqSpiderJdbcTemplate.queryForMap("select * from spider_account_schq where account = '"+account+"' LIMIT 1");
   	  }
@@ -42,6 +46,9 @@ public class SchqDbcom{
     	   String childAccountStr="'"+childAccountArr.replaceAll(",", "','")+"'";
   		   return schqSpiderJdbcTemplate.queryForList("select * from spider_account_schq_child where child_account in ("+childAccountStr+")");
   	  }
+      public void updateCookie(String id,String cookie){
+    	  schqSpiderJdbcTemplate.update("update spider_account_schq set reffer_cookie= '"+cookie +"' where id = "+id);
+      }
       //插入单条数据
       public void add(Map<String,String> dataMap,String tableName){
     	  BaseDbcom.add(dataMap, tableName, schqDataJdbcTemplate);

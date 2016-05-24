@@ -10,27 +10,27 @@ import com.ecmoho.base.Util.StringUtil;
 //系统登录模型
 public abstract class SeleniumSpider {
 	//获取webDriver,子类实现
-	public abstract WebDriver getWebDriver();
+	public abstract WebDriver getWebDriver(String startType,String ip);
 	//页面登录逻辑,子类实现
-	public abstract void loginPage(WebDriver webDriver,Map<String, Object> spider);
+	public abstract void loginPage(WebDriver webDriver,Map<String, Object> spider,String startType,String ip);
 	
-	public final String getCookie(Map<String, Object> spider){
-		WebDriver webDriver=getWebDriver();
-		String cookie=login(webDriver, spider);
+	public final String getCookie(String startType,String ip,Map<String, Object> spider){
+		WebDriver webDriver=getWebDriver(startType,ip);
+		String cookie=login(webDriver, spider,startType,ip);
 		return cookie;
 	}
 	//获取cookie逻辑
-	public final String login(WebDriver webDriver,Map<String, Object> spider){
+	public final String login(WebDriver webDriver,Map<String, Object> spider,String startType,String ip){
 		String login_url=StringUtil.objectVerString(spider.get("login_url"));
 		String red_url=StringUtil.objectVerString(spider.get("red_url"));
 		  //传入账号模拟登录
 		  String cookieStr = "";
 	        //尝试次数
-	        int times=2;
+	        int times=3;
 	        int i=1;
 	        try {
 	        	 //尝试登录
-		        loginPage(webDriver,spider);
+		        loginPage(webDriver,spider,startType,ip);
 		        //不停的检测，一旦当前页面URL不是登录页面URL，就说明浏览器已经进行了跳转
 	            while (i<times) {
 	                Thread.sleep(500L);
@@ -42,11 +42,11 @@ public abstract class SeleniumSpider {
 	           			   e.printStackTrace();
 	           		    }
 	           	        webDriver.get(red_url);
-	           	     try {
+	           	       try{
 	           			   Thread.sleep(500L);
-	           		    } catch (InterruptedException e) {
+	           		     }catch (InterruptedException e) {
 	           			   e.printStackTrace();
-	           		    }
+	           		     }
 	           		  //获取cookie，上面一跳出循环我认为就登录成功了，当然上面的判断不太严格，可以再进行修改
 	           	        Set<Cookie> cookies = webDriver.manage().getCookies();
 	           	      
@@ -61,7 +61,7 @@ public abstract class SeleniumSpider {
 	                	if(i<=times){
 //	                		SchqDbcom.updateSpiderZxfxFlag(account, "0");
 	                		i++;
-	                		loginPage(webDriver,spider);
+	                		loginPage(webDriver,spider,startType,ip);
 	                	}else{
 	                		break;
 	                	}
