@@ -4,7 +4,7 @@
 var timeout;
 var start=0;
 var oldlist=[];
-
+var $templates
 getUrlList();
 function getUrlList(){
 	$.ajax({
@@ -15,7 +15,6 @@ function getUrlList(){
 			var arrTr="";
 			if(start==0){
 				$.each(data,function(i,item){
-
 					oldlist.push(item.key.slice(0, item.key.lastIndexOf(",")));
 	//				console.log(item);
 	                arrTr+=createTr(i+1,item);
@@ -71,9 +70,9 @@ function getUrlList(){
                         
                         $itemTr.find("td:eq(7)").html(status=="active"?"正在执行":"执行完成");
 						if(status=="active"){
-						  	 $itemTr.find("td:eq(8) button.btn-primary").addClass("disabled");
+						  	 $itemTr.find("td:eq(8) button").addClass("disabled");
 						}else{
-							 $itemTr.find("td:eq(8) button.btn-primary").removeClass("disabled");
+							 $itemTr.find("td:eq(8) button").removeClass("disabled");
 						}
                    	}else{
 						 $("#mainTable tbody").append(createTr($("#mainTable tbody tr").size()+1,item));
@@ -97,9 +96,9 @@ function getUrlList(){
 }
 
 function createTr(i,item){
-   $templatetr=$("#mainTable tbody tr:eq(0)").removeAttr("hidden").clone();
+	var $templatetr=$("#demotr").clone();
+	$templatetr.show();
 	var itemArr=item.key.split(",");
-	
 	var accountname=itemArr[1];
 	var executecycle=itemArr[4];
 	var processordesc=itemArr[3];
@@ -133,7 +132,7 @@ function createTr(i,item){
     $templatetr.find("td:eq(6) .progress-bar").css("width",successRate+"%").addClass(progressbarclass).find("span").html(successcount).parent().next().html(faildcount);
     $templatetr.find("td:eq(7)").html(status=="active"?"正在执行":"执行完成");
     if(status=="active"){
-    	$templatetr.find("td:eq(8) button.btn-primary").addClass("disabled");
+    	$templatetr.find("td:eq(8) button").addClass("disabled");
     }
     return $templatetr.get(0).outerHTML;
 }
